@@ -7,284 +7,207 @@
 <meta name="description" content="404.lt – pamirštos ir slaptos vietos Lietuvoje. Interaktyvus žemėlapis, galerija ir istorijos." />
 <link rel="icon" href="https://via.placeholder.com/32x32.png?text=404" />
 <style>
-/* =======================
+/* =========================
    RESET & GLOBALS
-   ======================= */
-* { box-sizing: border-box; margin:0; padding:0; }
-html { scroll-behavior: smooth; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+   ========================= */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 body {
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  background: #060607;
+  background: #050507;
   color: #e9eef1;
-  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
   position: relative;
   overflow-x: hidden;
-  min-height: 100vh;
 }
 
-/* =======================
-   LOADER with 404.lt LOGO
-   ======================= */
+/* =========================
+   LOADER (CIRCULAR PROGRESS) + TEXT ANIMATION
+   ========================= */
 #preloader {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(180deg, #060607 0%, #040405 100%);
-  z-index: 99999;
+  position: fixed; inset: 0; display:flex; align-items:center; justify-content:center;
+  background: linear-gradient(180deg,#050507 0%, #040405 100%); z-index: 99999;
   transition: opacity .45s ease, visibility .45s ease;
-  visibility: visible;
-  opacity: 1;
+  visibility: visible; opacity: 1;
 }
 
-/* loader box */
+/* loader container */
 .loader {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  width: 320px;
-  max-width: 90%;
-  padding: 22px;
-  border-radius: 14px;
+  width: 360px; max-width: 92%; padding: 20px; border-radius: 16px;
+  display:flex; flex-direction:column; align-items:center; gap:14px;
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
   box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 8px 40px rgba(255,76,76,0.06);
   border: 1px solid rgba(255,255,255,0.03);
-  transform: translateY(6px);
 }
 
-/* logo square */
-.logo-box {
-  width: 96px;
-  height: 96px;
-  border-radius: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #ff4c4c 0%, #ff9f1c 100%);
-  box-shadow: 0 18px 50px rgba(255,76,76,0.18), inset 0 -8px 18px rgba(0,0,0,0.15);
-  transform-origin: center;
-  animation: logoPop 1.2s cubic-bezier(.2,.9,.3,1) infinite alternate;
+/* circular svg */
+.progress-ring { width:120px; height:120px; transform: rotate(-90deg); }
+.progress-center {
+  position: absolute; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  width:120px; height:120px; pointer-events:none; transform: rotate(90deg);
 }
+.logo-404 { font-weight:900; font-size:28px; color:#120707; letter-spacing:1px; }
+.loader-sub { color:#fff; font-weight:700; letter-spacing:1px; }
 
-/* big 404 text inside logo */
-.logo-404 {
-  font-weight: 900;
-  font-size: 28px;
-  color: #120707;
-  letter-spacing: 1px;
-  text-shadow: 0 4px 18px rgba(0,0,0,0.45);
-}
+/* ring stroke animation will be updated by JS */
+.progress-track { stroke: rgba(255,255,255,0.06); stroke-width:12; fill:none; }
+.progress-fill { stroke: url(#gradRing); stroke-width:12; stroke-linecap:round; fill:none; stroke-dasharray: 377; stroke-dashoffset: 377; transition: stroke-dashoffset 300ms linear; filter: drop-shadow(0 8px 22px rgba(255,76,76,0.12)); }
 
-/* small site name */
-.loader-text {
-  font-weight: 800;
-  color: #fff;
-  letter-spacing: 1px;
-  font-size: 18px;
-  margin-top: -6px;
-  text-shadow: 0 6px 18px rgba(0,0,0,0.6);
-}
+/* animated text letters (loader word) */
+.loading-text { display:flex; gap:6px; margin-top:6px; }
+.loading-text span { opacity:0; transform: translateY(6px) scale(.98); display:inline-block; color:#ffd7b5; font-weight:800; letter-spacing:1px; transition: all .35s cubic-bezier(.2,.9,.3,1); }
 
-/* progress bar */
-.loader-bar {
-  width: 100%;
-  height: 8px;
-  background: rgba(255,255,255,0.04);
-  border-radius: 999px;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.02);
-  box-shadow: inset 0 2px 6px rgba(255,255,255,0.02);
-}
-.loader-fill {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, #ff4c4c, #ff9f1c);
-  border-radius: 999px;
-  box-shadow: 0 8px 30px rgba(255,76,76,0.12);
-  transition: width 360ms linear;
-}
+/* subtle dots */
+.loader-dots { display:flex; gap:8px; margin-top:6px; }
+.loader-dots span { width:8px; height:8px; border-radius:50%; background: rgba(255,255,255,0.08); transform: scale(.9); animation: dotPulse 1.2s infinite ease-in-out; }
+.loader-dots span:nth-child(2) { animation-delay: .15s; } .loader-dots span:nth-child(3) { animation-delay: .3s; }
+@keyframes dotPulse { 0%{ transform:scale(.8); opacity:.6 } 50%{ transform:scale(1.15); opacity:1 } 100%{ transform:scale(.8); opacity:.6 } }
 
-/* subtle loading dots under bar */
-.loader-dots {
-  display:flex; gap:8px; margin-top:6px;
-}
-.loader-dots span {
-  width:8px; height:8px; border-radius:50%;
-  background: rgba(255,255,255,0.08);
-  transform: scale(.9);
-  animation: dotPulse 1.2s infinite ease-in-out;
-}
-.loader-dots span:nth-child(2) { animation-delay: .15s; }
-.loader-dots span:nth-child(3) { animation-delay: .3s; }
-@keyframes dotPulse {
-  0% { transform: scale(.8); opacity: .6; }
-  50% { transform: scale(1.15); opacity: 1; }
-  100% { transform: scale(.8); opacity: .6; }
-}
-
-/* logo pop animation */
-@keyframes logoPop {
-  from { transform: translateY(0) scale(1); box-shadow: 0 18px 50px rgba(255,76,76,0.18); }
-  to   { transform: translateY(-6px) scale(1.04); box-shadow: 0 30px 80px rgba(255,76,76,0.2); }
-}
-
-/* fade out preloader (applied by JS) */
+/* hide preloader */
 #preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
-/* =======================
-   BACKGROUND LAYERS & EFFECTS
-   ======================= */
+/* =========================
+   BACKGROUND EFFECTS (Aurora, lines, particles, clouds, rain, leaves)
+   ========================= */
 
-/* moving grid lines background */
+/* moving aurora gradient */
+.aurora {
+  position: fixed; inset: -10% -10% -10% -10%; z-index: 0; pointer-events: none; opacity: 0.16;
+  background: linear-gradient(120deg, rgba(255,76,76,0.12), rgba(255,159,28,0.06), rgba(40,120,255,0.02));
+  background-size: 400% 400%;
+  animation: auroraShift 18s ease-in-out infinite;
+  filter: blur(30px) saturate(1.1);
+}
+@keyframes auroraShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* moving grid lines */
 .bg-lines {
-  position: fixed; inset:0; z-index:0; pointer-events:none; opacity:0.12;
+  position: fixed; inset:0; z-index: 1; pointer-events:none; opacity:0.09;
   background-image:
-    linear-gradient(90deg, rgba(255,76,76,0.06) 0.5px, transparent 0.5px),
-    linear-gradient(180deg, rgba(255,159,28,0.03) 0.5px, transparent 0.5px);
+    linear-gradient(90deg, rgba(255,76,76,0.05) 0.5px, transparent 0.5px),
+    linear-gradient(180deg, rgba(255,159,28,0.02) 0.5px, transparent 0.5px);
   background-size: 420px 420px, 320px 320px;
-  animation: moveGrid 40s linear infinite, hueShift 18s linear infinite;
+  animation: moveGrid 36s linear infinite;
   mix-blend-mode: screen;
 }
-@keyframes moveGrid {
-  from { background-position: 0 0, 0 0; }
-  to   { background-position: 420px 420px, -320px -320px; }
-}
-@keyframes hueShift {
-  0% { filter: hue-rotate(0deg); }
-  50% { filter: hue-rotate(18deg) saturate(1.06); }
-  100% { filter: hue-rotate(0deg); }
-}
+@keyframes moveGrid { from { background-position: 0 0, 0 0; } to { background-position: 420px 420px, -320px -320px; } }
 
-/* long moving streaks */
-.bg-streaks { position: fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; opacity:0.06; }
+/* long streaks */
+.bg-streaks { position: fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden; opacity:0.06; }
 .bg-streaks .streak { position:absolute; width:200%; height:1px; background: linear-gradient(90deg, transparent, rgba(255,76,76,0.9), transparent); top:20%; left:-40%; transform:rotate(-4deg); filter: blur(7px); animation: streakMove 12s linear infinite; }
 .bg-streaks .streak.two { top:60%; animation-duration:18s; transform:rotate(-2deg); opacity:0.45; }
-@keyframes streakMove { from { left:-100%; } to { left:100%; } }
+@keyframes streakMove { from{left:-100%} to{left:100%} }
 
-/* soft flares */
-.bg-flares { position: fixed; inset:0; z-index:0; pointer-events:none; }
-.bg-flares .flare {
-  position:absolute; width:260px; height:260px; border-radius:50%;
-  background: radial-gradient(circle at 30% 30%, rgba(255,76,76,0.18), rgba(255,159,28,0.06) 20%, transparent 45%);
-  filter: blur(40px);
-  opacity: 0.08;
-  animation: flareFloat 28s ease-in-out infinite;
+/* clouds (SVG will be translated by JS) */
+.clouds { position: fixed; inset: 6% 0 70% 0; z-index: 2; pointer-events: none; opacity:0.07; filter: blur(8px); }
+
+/* light rain (CSS lines) */
+.rain {
+  pointer-events:none; position: fixed; inset:0; z-index:1; opacity:0.02;
+  background-image: linear-gradient(transparent, rgba(255,255,255,0.02));
 }
-.bg-flares .flare.two { left: 65%; top: 10%; transform: scale(0.9); animation-duration:32s; opacity:0.06; }
-.bg-flares .flare.three { left: 10%; top: 70%; transform: scale(0.7); animation-duration:36s; opacity:0.05; }
-@keyframes flareFloat {
-  0% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(40px) scale(1.06); }
-  100% { transform: translateY(0) scale(1); }
+.rain::before {
+  content:""; position:absolute; inset:0;
+  background-image: repeating-linear-gradient(120deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 2px, transparent 8px);
+  transform: translateY(-20vh);
+  animation: rainFall 6s linear infinite;
+  filter: blur(0.5px) brightness(0.98);
+}
+@keyframes rainFall { to { transform: translateY(20vh); } }
+
+/* floating leaves / particles */
+.floating {
+  position: fixed; inset: 20% 0 10% 0; z-index:2; pointer-events:none; overflow:visible;
+  opacity: 0.06;
+}
+.leaf {
+  position:absolute; width:24px; height:12px; background: linear-gradient(90deg, rgba(255,120,80,0.9), rgba(255,200,140,0.6));
+  border-radius: 6px; transform-origin:center; filter: blur(0.6px);
+  animation: leafFloat linear infinite;
+}
+.leaf.one { left:8%; top:20%; animation-duration: 12s; }
+.leaf.two { left:55%; top:35%; animation-duration: 18s; }
+.leaf.three { left:78%; top:60%; animation-duration: 22s; }
+@keyframes leafFloat {
+  0% { transform: translateY(0) rotate(0deg) scale(.9); opacity:.9; }
+  50% { transform: translateY(24vh) rotate(40deg) scale(1.05); opacity: .6; }
+  100% { transform: translateY(0) rotate(0deg) scale(.9); opacity:.9; }
 }
 
-/* subtle grain (using CSS) */
-.bg-noise { position: fixed; inset:0; z-index: 3; pointer-events:none; mix-blend-mode: overlay; opacity:0.03;
+/* subtle noise overlay */
+.bg-noise { position: fixed; inset:0; z-index: 4; pointer-events:none; mix-blend-mode: overlay; opacity:0.03;
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="n"><feTurbulence baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(%23n)" /></svg>');
 }
 
 /* starfield canvas */
-#starfield { position: fixed; inset:0; z-index: 1; pointer-events:none; opacity:0.15; }
+#starfield { position: fixed; inset:0; z-index:1; pointer-events:none; opacity:0.14; }
 
-/* parallax layers container (JS manipulates translateY) */
-.parallax-layer { position: fixed; inset:0; z-index: 0; pointer-events: none; }
-
-/* =======================
-   HEADER & NAVIGATION
-   ======================= */
+/* =========================
+   HEADER / NAV
+   ========================= */
 header {
   position: fixed; top:0; left:0; right:0; height:66px; z-index: 9999;
   display:flex; align-items:center; justify-content:space-between; padding:0 28px;
-  background: linear-gradient(180deg, rgba(6,6,7,0.88), rgba(6,6,7,0.35));
-  border-bottom: 1px solid rgba(255,255,255,0.03);
-  backdrop-filter: blur(6px);
+  background: linear-gradient(180deg, rgba(5,5,6,0.86), rgba(5,5,6,0.35));
+  border-bottom: 1px solid rgba(255,255,255,0.03); backdrop-filter: blur(6px);
 }
-.brand { display:flex; align-items:center; gap:12px; }
+.brand { display:flex; align-items:center; gap:12px; z-index: 10000; }
 .logo {
   width:44px; height:44px; border-radius:8px;
   background: linear-gradient(135deg,#ff4c4c,#ff9f1c);
   display:flex; align-items:center; justify-content:center; font-weight:900; color:#120707; box-shadow: 0 8px 26px rgba(255,76,76,0.12);
 }
 .brand h1 { font-size:18px; letter-spacing:2px; color:#fff; margin-left:4px; }
-nav { display:flex; gap:18px; align-items:center; }
-nav a {
-  color: #e9eef1; font-weight:600; padding:8px 10px; border-radius:8px; transition: all .18s ease; font-size:14px;
-}
-nav a:hover, nav a.active {
-  color:#060607; background: linear-gradient(90deg,#ff4c4c,#ff9f1c); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(255,76,76,0.12);
-}
+nav { display:flex; gap:18px; align-items:center; z-index: 10000; }
+nav a { color:#e9eef1; font-weight:600; padding:8px 10px; border-radius:8px; transition: all .18s ease; font-size:14px; }
+nav a:hover, nav a.active { color:#060607; background: linear-gradient(90deg,#ff4c4c,#ff9f1c); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(255,76,76,0.12); }
 
-/* hamburger (mobile) */
-.hamburger { display:none; width:40px; height:40px; border-radius:8px; align-items:center; justify-content:center; cursor:pointer; background: transparent; border: none; }
+/* hamburger */
+.hamburger { display:none; width:40px; height:40px; border-radius:8px; align-items:center; justify-content:center; cursor:pointer; background: transparent; border: none; z-index:10000; }
 
-/* =======================
-   HERO / INTRO
-   ======================= */
-.hero {
-  position: relative; height:78vh; min-height:520px; display:flex; align-items:center; justify-content:center; text-align:center; padding:0 20px; z-index: 5; overflow:visible;
-}
-.hero .content { max-width:960px; z-index: 6; }
-.hero h2 {
-  font-size: clamp(28px, 4vw, 56px); color: #fff; line-height:1.02; letter-spacing: 1px;
-  text-shadow: 0 6px 30px rgba(0,0,0,0.8), 0 0 36px rgba(255,76,76,0.06);
-  transform: translateY(10px); opacity: 0;
-}
-.hero p {
-  margin-top:14px; color:#d6d6d6; font-size:18px; transform: translateY(10px); opacity: 0;
-}
+/* =========================
+   HERO
+   ========================= */
+.hero { position: relative; height:78vh; min-height:520px; display:flex; align-items:center; justify-content:center; text-align:center; padding:0 20px; z-index: 6; overflow:visible; }
+.hero .content { max-width:960px; z-index: 7; }
+.hero h2 { font-size: clamp(28px, 4vw, 56px); color: #fff; line-height:1.02; letter-spacing:1px; text-shadow: 0 6px 30px rgba(0,0,0,0.8), 0 0 36px rgba(255,76,76,0.06); transform: translateY(10px); opacity: 0; }
+.hero p { margin-top:14px; color:#d6d6d6; font-size:18px; transform: translateY(10px); opacity: 0; }
 .cta { margin-top:22px; display:flex; gap:12px; justify-content:center; transform: translateY(10px); opacity: 0; }
 
-/* CTA Buttons */
-.btn {
-  padding: 10px 18px; border-radius: 10px; font-weight:700; cursor:pointer; border:none; transition: all .22s ease; display:inline-flex; align-items:center; gap:10px;
-}
-.btn.primary {
-  background: linear-gradient(90deg,#ff4c4c,#ff9f1c); color: #060607; box-shadow: 0 12px 40px rgba(255,76,76,0.12);
-}
-.btn.ghost {
-  background: rgba(255,255,255,0.02); color: #e9eef1; border: 1px solid rgba(255,255,255,0.04);
-}
+/* buttons */
+.btn { padding:10px 18px; border-radius:10px; font-weight:700; cursor:pointer; border:none; transition:all .22s ease; display:inline-flex; align-items:center; gap:10px; }
+.btn.primary { background: linear-gradient(90deg,#ff4c4c,#ff9f1c); color:#060607; box-shadow: 0 12px 40px rgba(255,76,76,0.12); }
+.btn.ghost { background: rgba(255,255,255,0.02); color:#e9eef1; border: 1px solid rgba(255,255,255,0.04); }
 
-/* decorative underline */
-.hero h2::after { content: ''; display:block; width:140px; height:6px; margin:18px auto 0; border-radius:6px; background: linear-gradient(90deg, rgba(255,76,76,0.9), rgba(255,159,28,0.8)); opacity: 0; transform: scaleX(.6); transition: all .6s cubic-bezier(.2,.9,.3,1); }
+/* hero underline animation */
+.hero h2::after { content:''; display:block; width:140px; height:6px; margin:18px auto 0; border-radius:6px; background: linear-gradient(90deg, rgba(255,76,76,0.9), rgba(255,159,28,0.8)); opacity: 0; transform: scaleX(.6); transition: all .6s cubic-bezier(.2,.9,.3,1); }
 
-/* =======================
-   MAIN / SECTIONS
-   ======================= */
-main { position: relative; z-index: 6; padding-bottom: 120px; }
-
-/* container */
+/* =========================
+   MAIN / MAP / SECTIONS
+   ========================= */
+main { position: relative; z-index: 7; padding-bottom: 160px; }
 .container { width:92%; max-width:1200px; margin: 30px auto; }
 
-/* MAP BOX */
+/* MAP */
 .map-wrap {
-  position: relative; border-radius:14px; overflow:hidden; padding:12px; margin-top: 14px;
+  position: relative; border-radius:16px; overflow:hidden; padding:12px; margin-top:12px;
   background: linear-gradient(180deg, rgba(255,76,76,0.03), rgba(255,159,28,0.02));
-  box-shadow: 0 28px 80px rgba(0,0,0,0.6), 0 0 80px rgba(255,76,76,0.06);
+  box-shadow: 0 28px 90px rgba(0,0,0,0.6), 0 0 80px rgba(255,76,76,0.06);
   border: 2px solid rgba(255,76,76,0.08);
   transition: transform .28s ease, box-shadow .28s ease;
 }
 .map-wrap:hover { transform: translateY(-6px); box-shadow: 0 40px 120px rgba(0,0,0,0.7), 0 0 160px rgba(255,76,76,0.12); }
+.map-wrap::before { content:''; position:absolute; inset:-8px; z-index:1; border-radius:20px; background: radial-gradient(closest-side, rgba(255,76,76,0.12), transparent 40%); filter: blur(16px); pointer-events:none; }
+.map-iframe { width:100%; height:72vh; min-height:420px; border:0; display:block; position:relative; z-index:3; }
 
-/* red glow */
-.map-wrap::before {
-  content: ''; position:absolute; inset: -8px; z-index: 1; border-radius: 18px;
-  background: radial-gradient(closest-side, rgba(255,76,76,0.12), transparent 40%);
-  filter: blur(16px); pointer-events: none;
-}
+/* section styles */
+.section { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:12px; padding:22px; margin: 34px auto; box-shadow: 0 12px 40px rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.02); }
 
-/* iframe */
-.map-iframe { width:100%; height:72vh; min-height:420px; border: 0; display:block; position:relative; z-index:3; }
-
-/* SECTIONS */
-.section {
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  border-radius:12px; padding:22px; margin: 34px auto; box-shadow: 0 12px 40px rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.02);
-}
-
-/* secret list */
+/* secrets list */
 .secret-list li { margin: 10px 0; font-style: italic; color:#ffd5a8; transition: transform .18s ease, color .18s ease; cursor: default; }
 .secret-list li:hover { transform: translateX(6px); color:#ffdfc9; }
 
@@ -293,60 +216,83 @@ main { position: relative; z-index: 6; padding-bottom: 120px; }
 .gallery img { width:100%; height:150px; object-fit:cover; border-radius:10px; border:1px solid rgba(255,255,255,0.03); transition: transform .24s ease, box-shadow .24s ease; cursor:pointer; }
 .gallery img:hover { transform: scale(1.03); box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
 
-/* contact form */
+/* contact */
 .contact-grid { display:grid; grid-template-columns: 1fr 380px; gap:20px; align-items:start; }
 @media (max-width: 940px) { .contact-grid { grid-template-columns: 1fr; } }
 .contact-info { padding:18px; border-radius:10px; background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); border:1px solid rgba(255,255,255,0.02); }
-form.contact-form { display:flex; flex-direction:column; gap:10px; }
-.contact-form input, .contact-form textarea {
-  padding:10px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background: rgba(0,0,0,0.3); color: #e9eef1; resize: vertical;
-}
+.contact-form input, .contact-form textarea { padding:10px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background: rgba(0,0,0,0.3); color:#e9eef1; resize:vertical; }
 .contact-form label { font-weight:700; color:#ffd7b5; font-size:13px; }
 .contact-form button { margin-top:8px; padding:10px 16px; border-radius:8px; border:none; background: linear-gradient(90deg,#ff4c4c,#ff9f1c); color:#060607; font-weight:800; cursor:pointer; }
 
 /* footer */
 footer { margin-top:60px; padding:32px 18px; text-align:center; color:#9aa3ad; font-size:14px; border-top:1px solid rgba(255,255,255,0.02); background: linear-gradient(180deg, rgba(0,0,0,0.03), transparent); position: sticky; bottom:0; }
 
-/* scroll-top */
-.scroll-top {
-  position: fixed; right:20px; bottom:24px; width:52px; height:52px; border-radius:50%;
-  background: linear-gradient(90deg,#ff4c4c,#ff9f1c); color:#060607; font-weight:800; font-size:20px;
-  display:flex; align-items:center; justify-content:center; z-index: 9999; cursor:pointer; box-shadow: 0 12px 40px rgba(255,76,76,0.12);
-  transition: transform .18s ease, opacity .18s ease; opacity:0; pointer-events:none;
-}
+/* scroll top */
+.scroll-top { position: fixed; right:20px; bottom:24px; width:52px; height:52px; border-radius:50%; background: linear-gradient(90deg,#ff4c4c,#ff9f1c); color:#060607; font-weight:800; font-size:20px; display:flex; align-items:center; justify-content:center; z-index: 9999; cursor:pointer; box-shadow: 0 12px 40px rgba(255,76,76,0.12); transition: transform .18s ease, opacity .18s ease; opacity:0; pointer-events:none; }
 .scroll-top.show { opacity: 1; pointer-events:auto; transform: translateY(-6px); }
 
-/* small util animations */
+/* reveal utility */
 .revealed { opacity:1 !important; transform: none !important; transition: all .6s cubic-bezier(.2,.9,.3,1); }
 .fade-delay-1 { transition-delay: .15s; }
 .fade-delay-2 { transition-delay: .35s; }
 .fade-delay-3 { transition-delay: .65s; }
 
 /* responsive */
-@media (max-width:900px) {
+@media (max-width: 900px) {
   nav { display:none; }
   .hamburger { display:flex; }
-  .hero { height: 62vh; min-height:420px; }
+  .hero { height:60vh; min-height:420px; }
   .map-iframe { height:62vh; }
 }
 </style>
 </head>
-
 <body>
-  <!-- PRELOADER: LOGO + PROGRESS BAR -->
+
+  <!-- PRELOADER (CIRCULAR + TEXT ANIM) -->
   <div id="preloader" aria-hidden="false">
-    <div class="loader" role="status" aria-live="polite">
-      <div class="logo-box" aria-hidden="true"><div class="logo-404">404</div></div>
-      <div class="loader-text">404.lt</div>
-      <div class="loader-bar" aria-hidden="true"><div class="loader-fill" id="loaderFill" style="width:0%"></div></div>
+    <div class="loader" role="status" aria-live="polite" aria-label="Puslapis kraunasi">
+      <!-- SVG ring with gradient -->
+      <div style="position:relative;">
+        <svg class="progress-ring" viewBox="0 0 120 120" aria-hidden="true">
+          <defs>
+            <linearGradient id="gradRing" x1="0" x2="1">
+              <stop offset="0%" stop-color="#ff4c4c"/>
+              <stop offset="100%" stop-color="#ff9f1c"/>
+            </linearGradient>
+          </defs>
+          <circle class="progress-track" cx="60" cy="60" r="58"></circle>
+          <circle class="progress-fill" cx="60" cy="60" r="58"></circle>
+        </svg>
+        <div class="progress-center" style="position:absolute; left:0; top:0;">
+          <div class="logo-404">404</div>
+          <div class="loader-sub" style="font-size:13px; margin-top:6px;">404.lt</div>
+        </div>
+      </div>
+
+      <!-- animated loading word (each letter animated) -->
+      <div class="loading-text" aria-hidden="true">
+        <span>L</span><span>a</span><span>o</span><span>d</span><span>i</span><span>n</span><span>g</span><span>…</span>
+      </div>
+
       <div class="loader-dots" aria-hidden="true"><span></span><span></span><span></span></div>
     </div>
   </div>
 
   <!-- BACKGROUND LAYERS -->
+  <div class="aurora" aria-hidden="true"></div>
   <div class="bg-lines" aria-hidden="true"></div>
   <div class="bg-streaks" aria-hidden="true"><div class="streak"></div><div class="streak two"></div></div>
-  <div class="bg-flares" aria-hidden="true"><div class="flare"></div><div class="flare two"></div><div class="flare three"></div></div>
+  <div class="clouds" aria-hidden="true">
+    <!-- simple cloud SVG repeated (cloud visuals subtle) -->
+    <svg width="100%" height="120" viewBox="0 0 1200 120" preserveAspectRatio="none" style="transform:translateY(0);">
+      <path d="M0 60 C 100 20, 200 20, 300 60 C 400 100, 500 100, 600 60 C 700 20, 800 20, 900 60 C 1000 100, 1100 100, 1200 60 L1200 120 L0 120 Z"
+            fill="rgba(255,255,255,0.06)"></path>
+    </svg>
+  </div>
+  <div class="rain" aria-hidden="true"></div>
+  <div class="floating" aria-hidden="true">
+    <div class="leaf one"></div><div class="leaf two"></div><div class="leaf three"></div>
+  </div>
   <div class="bg-noise" aria-hidden="true"></div>
   <canvas id="starfield" aria-hidden="true"></canvas>
 
@@ -367,7 +313,7 @@ footer { margin-top:60px; padding:32px 18px; text-align:center; color:#9aa3ad; f
       <a href="#contact">Kontaktai</a>
     </nav>
 
-    <button class="hamburger" id="hamburgerBtn" aria-label="Atidaryti meniu" title="Meniu">
+    <button class="hamburger" id="hamburgerBtn" aria-label="Atidaryti meniu" title="Meniu" style="display:none;">
       <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="18" height="2" rx="1" fill="#e9eef1"/><rect y="6" width="18" height="2" rx="1" fill="#e9eef1"/><rect y="12" width="18" height="2" rx="1" fill="#e9eef1"/></svg>
     </button>
   </header>
@@ -384,9 +330,9 @@ footer { margin-top:60px; padding:32px 18px; text-align:center; color:#9aa3ad; f
     </div>
   </section>
 
-  <!-- MAIN CONTENT (unchanged: map without markers) -->
+  <!-- MAIN -->
   <main>
-
+    <!-- MAP (no markers) -->
     <div id="map" class="container map-wrap section" role="region" aria-label="Žemėlapis">
       <iframe class="map-iframe"
         src="https://www.google.com/maps/d/u/0/embed?mid=19QHh2E1I7QKqMvTN9FCtXeXCQyja2yU&ehbc=2E312F&noprof=1"
@@ -394,6 +340,7 @@ footer { margin-top:60px; padding:32px 18px; text-align:center; color:#9aa3ad; f
         title="404.lt žemėlapis"></iframe>
     </div>
 
+    <!-- SLAPTOS -->
     <div id="secrets" class="container section" role="region" aria-label="Slaptos vietos">
       <h2 class="animated">Slaptos vietos</h2>
       <p style="color:#dcdcdc; margin-top:8px;">Trumpi užuominų aprašymai be tikslių koordinatų — privatumas ir saugumas svarbiau.</p>
@@ -406,6 +353,7 @@ footer { margin-top:60px; padding:32px 18px; text-align:center; color:#9aa3ad; f
       </ul>
     </div>
 
+    <!-- ABOUT -->
     <div id="about" class="container section" role="region" aria-label="Apie projektą">
       <h2 class="animated">Apie projektą</h2>
       <p style="margin-top:12px; color:#d6d6d6;">
@@ -414,6 +362,7 @@ footer { margin-top:60px; padding:32px 18px; text-align:center; color:#9aa3ad; f
       </p>
     </div>
 
+    <!-- NEWS -->
     <div id="news" class="container section" role="region" aria-label="Naujienos">
       <h2 class="animated">Naujienos</h2>
       <ul style="margin-top:12px; color:#d6d6d6;">
@@ -423,6 +372,7 @@ footer { margin-top:60px; padding:32px 18px; text-align:center; color:#9aa3ad; f
       </ul>
     </div>
 
+    <!-- GALLERY -->
     <div id="gallery" class="container section" role="region" aria-label="Galerija">
       <h2 class="animated">Galerija</h2>
       <div class="gallery" style="margin-top:12px;">
@@ -433,29 +383,34 @@ footer { margin-top:60px; padding:32px 18px; text-align:center; color:#9aa3ad; f
       </div>
     </div>
 
+    <!-- CONTACTS with Formspree integration -->
     <div id="contact" class="container section" role="region" aria-label="Kontaktai">
       <h2 class="animated">Kontaktai</h2>
-      <p style="color:#d6d6d6; margin-top:8px;">Čia galėsi įrašyti savo Discord / TikTok / el. pašto nuorodas. Dabar pateikta paprasta forma — vėliau galime integruoti Formspree, Netlify Forms ar Google Forms.</p>
+      <p style="color:#d6d6d6; margin-top:8px;">Įrašyk savo Discord / TikTok / el. paštą čia arba siųsk žinutę per formą — gausime ją tiesiai į Formspree.</p>
 
       <div class="contact-grid" style="margin-top:16px;">
-        <form class="contact-form" action="mailto:your@email.com" method="post" enctype="text/plain" style="max-width:700px;">
+        <!-- FORM: JS will POST to Formspree endpoint. Replace YOUR_FORM_ID in JS below. -->
+        <form id="contactForm" class="contact-form" action="#" method="POST" novalidate>
           <label for="c-name">Vardas</label>
           <input id="c-name" name="name" type="text" placeholder="Tavo vardas" required>
 
           <label for="c-email">El. paštas</label>
           <input id="c-email" name="email" type="email" placeholder="tavo@pastas.lt" required>
 
-          <label for="c-social">Social (Discord / TikTok / Insta — palikite nuorodą)</label>
+          <label for="c-social">Social (Discord / TikTok / Insta)</label>
           <input id="c-social" name="social" type="text" placeholder="pvz. discord: username#1234">
 
           <label for="c-message">Žinutė</label>
           <textarea id="c-message" name="message" rows="6" placeholder="Žinutė..." required></textarea>
 
-          <button type="submit">Siųsti (siųs el. paštą)</button>
-          <div style="font-size:12px;color:#bfbfbf;margin-top:8px;">Pastaba: ši forma naudoja <code>mailto:</code> — jeigu nori automatinio surinkimo, galime integruoti Formspree/Netlify vėliau.</div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <button id="formSubmit" type="submit" style="display:inline-flex; align-items:center;" class="btn primary">Siųsti</button>
+            <div id="formStatus" style="color:#d6d6d6; font-size:14px;"></div>
+          </div>
+          <div style="font-size:12px;color:#bfbfbf;margin-top:8px;">Formspree integracija (AJAX). <br>Jei dar neturi Formspree ID, susikurk formą Formspree.io ir įdėk ID toliau.</div>
         </form>
 
-        <div class="contact-info" style="min-height:200px;">
+        <div class="contact-info">
           <h4 style="color:#ffd7b5;margin-bottom:10px;">Greiti kontaktai</h4>
           <p style="color:#d6d6d6;">Discord: <span id="discordPlaceholder" style="color:#fff;">(pridėsi vėliau)</span></p>
           <p style="color:#d6d6d6;">TikTok: <span id="tiktokPlaceholder" style="color:#fff;">(pridėsi vėliau)</span></p>
@@ -485,119 +440,160 @@ footer { margin-top:60px; padding:32px 18px; text-align:center; color:#9aa3ad; f
     </div>
   </footer>
 
-  <!-- LIGHTBOX MARKUP (hidden until needed) -->
+  <!-- LIGHTBOX -->
   <div id="lightbox" aria-hidden="true" style="position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(0,0,0,0.85); z-index:99999;">
     <button id="lbClose" aria-label="Uždaryti" style="position:absolute; top:24px; right:24px; background:transparent; border:none; color:#fff; font-size:28px; cursor:pointer;">✕</button>
     <img id="lbImg" src="" alt="" style="max-width:92%; max-height:86%; border-radius:10px; box-shadow: 0 20px 80px rgba(0,0,0,0.8);">
   </div>
 
 <script>
-/* =======================
-   LOADER (progress simulation) + hide on real load
-   ======================= */
-(function loaderSim(){
-  const fill = document.getElementById('loaderFill');
+/* =========================
+   CONFIG
+   ========================= */
+/*
+  Formspree:
+  1) Susikurk formą https://formspree.io
+  2) Gausi form id, pvz 'mgebqvkn' -> tada pakeisk FORMSPREE_ENDPOINT žemiau:
+     const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mgebqvkn';
+*/
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID'; // <-- PAKEISK ČIA savo Formspree ID
+
+/* =========================
+   LOADER: circular progress + text animation
+   ========================= */
+(function loaderCircular(){
   const pre = document.getElementById('preloader');
-  if(!fill || !pre) return;
+  const fill = document.querySelector('.progress-fill');
+  const loadingLetters = document.querySelectorAll('.loading-text span');
 
-  // simulate progress up to 88% while page loads
+  if(!pre || !fill) return;
+  const radius = 58;
+  const circumference = 2 * Math.PI * radius;
+  fill.style.strokeDasharray = `${circumference}`;
+  fill.style.strokeDashoffset = `${circumference}`;
+
+  // animate letters sequentially
+  loadingLetters.forEach((el, i) => {
+    setTimeout(() => { el.style.opacity = 1; el.style.transform = 'translateY(0) scale(1)'; }, 120 + i*90);
+  });
+
+  // progress simulation until real load
   let progress = 0;
-  const step = () => {
-    // increase by small random amounts until 88
-    const inc = Math.random()*6 + 2;
-    progress = Math.min(progress + inc, 88);
-    fill.style.width = progress + '%';
-    if(progress < 88) {
-      setTimeout(step, 120 + Math.random()*180);
-    }
-  };
-  step();
+  function setProgress(p){
+    p = Math.max(0, Math.min(100, p));
+    const offset = circumference - (p / 100) * circumference;
+    fill.style.strokeDashoffset = offset;
+  }
 
-  // when real load fires, finish to 100% and hide
+  // simulate until 88%
+  function simStep(){
+    const inc = Math.random() * 6 + 1.5;
+    progress = Math.min(88, progress + inc);
+    setProgress(progress);
+    if(progress < 88) setTimeout(simStep, 120 + Math.random()*180);
+  }
+  simStep();
+
+  // finish on window load
   window.addEventListener('load', () => {
-    // small delay so user sees completed bar
-    setTimeout(()=> {
-      fill.style.width = '100%';
-      // fade out preloader
+    // small pause then finish
+    setTimeout(() => {
+      setProgress(100);
+      // hide loader smoothly
       pre.classList.add('hidden');
-      // remove from DOM after transition
-      setTimeout(()=> { if(pre && pre.parentNode) pre.parentNode.removeChild(pre); }, 600);
+      setTimeout(()=> { if(pre && pre.parentNode) pre.parentNode.removeChild(pre); }, 700);
     }, 260);
   });
 
-  // fallback: if load takes too long, ensure it finishes after 8s
-  setTimeout(()=> {
-    if(!pre.classList.contains('hidden')){
-      fill.style.width = '100%';
+  // fallback in case load stalls
+  setTimeout(() => {
+    if(!pre.classList.contains('hidden')) {
+      setProgress(100);
       pre.classList.add('hidden');
-      setTimeout(()=> { if(pre && pre.parentNode) pre.parentNode.removeChild(pre); }, 600);
+      setTimeout(()=> { if(pre && pre.parentNode) pre.parentNode.removeChild(pre); }, 700);
     }
-  }, 8000);
+  }, 10000);
 })();
 
-/* =======================
-   STARFIELD canvas
-   ======================= */
+/* =========================
+   STARFIELD (canvas)
+   ========================= */
 (function starfield(){
   const canvas = document.getElementById('starfield');
-  if (!canvas) return;
+  if(!canvas) return;
   const ctx = canvas.getContext('2d');
   let w = canvas.width = innerWidth;
   let h = canvas.height = innerHeight;
   const stars = [];
   const STAR_COUNT = Math.floor((w*h) / 9000);
-
-  for (let i=0;i<STAR_COUNT;i++){
+  for(let i=0;i<STAR_COUNT;i++){
     stars.push({
-      x: Math.random() * w,
-      y: Math.random() * h,
-      r: Math.random() * 1.5 + 0.2,
-      a: Math.random() * 0.8 + 0.2,
-      vx: (Math.random() - 0.5) * 0.02,
-      vy: (Math.random() - 0.2) * 0.02
+      x: Math.random()*w,
+      y: Math.random()*h,
+      r: Math.random()*1.6 + 0.2,
+      a: Math.random()*0.9 + 0.1,
+      vx: (Math.random()-0.5)*0.03,
+      vy: (Math.random()-0.2)*0.03
     });
   }
-
   function resize(){ w = canvas.width = innerWidth; h = canvas.height = innerHeight; }
   addEventListener('resize', resize);
-
   function draw(){
     ctx.clearRect(0,0,w,h);
-    for (const s of stars){
+    for(const s of stars){
       ctx.beginPath();
-      ctx.fillStyle = 'rgba(255,255,255,' + s.a + ')';
+      ctx.fillStyle = `rgba(255,255,255,${s.a})`;
       ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
       ctx.fill();
-      // twinkle
-      s.a += (Math.random() - 0.5) * 0.02;
-      if (s.a < 0.05) s.a = 0.05;
-      if (s.a > 1) s.a = 1;
+      s.a += (Math.random()-0.5)*0.02;
+      if(s.a < 0.05) s.a = 0.05;
+      if(s.a > 1) s.a = 1;
       s.x += s.vx;
       s.y += s.vy;
-      if (s.x < 0) s.x = w;
-      if (s.x > w) s.x = 0;
-      if (s.y < 0) s.y = h;
-      if (s.y > h) s.y = 0;
+      if(s.x < 0) s.x = w;
+      if(s.x > w) s.x = 0;
+      if(s.y < 0) s.y = h;
+      if(s.y > h) s.y = 0;
     }
     requestAnimationFrame(draw);
   }
   draw();
 })();
 
-/* =======================
-   PARALLAX & ANIMATIONS (unchanged)
-   ======================= */
+/* =========================
+   BACKGROUND cloud motion + leaf animations
+   ========================= */
+(function cloudsLeaves(){
+  const clouds = document.querySelector('.clouds svg');
+  if(!clouds) return;
+  // gentle horizontal motion
+  let t = 0;
+  function loop(){
+    t += 0.002;
+    const x = Math.sin(t) * 6;
+    clouds.style.transform = `translateX(${x}px)`;
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+
+/* =========================
+   PARALLAX for flares on scroll
+   ========================= */
 (function parallax(){
   const flares = document.querySelectorAll('.bg-flares .flare');
   window.addEventListener('scroll', () => {
     const y = window.scrollY;
     flares.forEach((f, i) => {
-      const speed = 0.03 + (i * 0.01);
-      f.style.transform = `translateY(${y * speed}px) scale(${1 - i*0.05})`;
+      const speed = 0.02 + (i * 0.01);
+      f.style.transform = `translateY(${y * speed}px) scale(${1 - i*0.04})`;
     });
   }, { passive: true });
 })();
 
+/* =========================
+   IntersectionObserver: fade-in sections
+   ========================= */
 (function fadeInSections(){
   const targets = document.querySelectorAll('.section, .gallery img, .secret-list li, .hero .animated, h2.animated');
   const io = new IntersectionObserver((entries, obs) => {
@@ -610,51 +606,40 @@ footer { margin-top:60px; padding:32px 18px; text-align:center; color:#9aa3ad; f
       }
     });
   }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-
   targets.forEach(t => {
-    if(!t.classList.contains('revealed')){
-      t.style.opacity = 0;
-      t.style.transform = 'translateY(14px)';
-      io.observe(t);
-    }
+    t.style.opacity = 0;
+    t.style.transform = 'translateY(14px)';
+    io.observe(t);
   });
 })();
 
-/* =======================
-   GALLERY LIGHTBOX
-   ======================= */
+/* =========================
+   Gallery lightbox
+   ========================= */
 (function lightbox(){
   const images = document.querySelectorAll('.gallery img');
   const lightbox = document.getElementById('lightbox');
   const lbImg = document.getElementById('lbImg');
   const lbClose = document.getElementById('lbClose');
-  if (!images.length) return;
-
+  if(!images.length) return;
   images.forEach(img => {
     img.addEventListener('click', () => {
       const src = img.dataset.large || img.src;
       lbImg.src = src;
-      lightbox.style.display = 'flex';
-      lightbox.setAttribute('aria-hidden','false');
+      lightbox.style.display = 'flex'; lightbox.setAttribute('aria-hidden','false');
       setTimeout(()=> lightbox.style.opacity = '1', 20);
       document.body.style.overflow = 'hidden';
     });
   });
-
-  function closeLB(){
-    lightbox.style.opacity = '0';
-    lightbox.setAttribute('aria-hidden','true');
-    setTimeout(()=> { lightbox.style.display = 'none'; lbImg.src = ''; document.body.style.overflow = ''; }, 250);
-  }
-
+  function closeLB(){ lightbox.style.opacity='0'; lightbox.setAttribute('aria-hidden','true'); setTimeout(()=> { lightbox.style.display='none'; lbImg.src=''; document.body.style.overflow=''; }, 260); }
   lbClose.addEventListener('click', closeLB);
-  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLB(); });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLB(); });
+  lightbox.addEventListener('click', (e)=> { if(e.target===lightbox) closeLB(); });
+  document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeLB(); });
 })();
 
-/* =======================
+/* =========================
    UI: scroll top, nav, hamburger
-   ======================= */
+   ========================= */
 (function ui(){
   const scrollBtn = document.getElementById('scrollTopBtn');
   const navLinks = document.querySelectorAll('header nav a');
@@ -662,32 +647,21 @@ footer { margin-top:60px; padding:32px 18px; text-align:center; color:#9aa3ad; f
   const nav = document.querySelector('header nav');
 
   window.addEventListener('scroll', () => {
-    if (window.scrollY > 260) scrollBtn.classList.add('show'); else scrollBtn.classList.remove('show');
-    // scroll spy
+    if(window.scrollY > 260) scrollBtn.classList.add('show'); else scrollBtn.classList.remove('show');
     let current = '';
     document.querySelectorAll('main > .container, main .section').forEach(sec => {
       const id = sec.id;
-      if (!id) return;
-      if (window.scrollY >= sec.offsetTop - 90) current = id;
+      if(!id) return;
+      if(window.scrollY >= sec.offsetTop - 90) current = id;
     });
     navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === ('#' + current)));
   });
 
   scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-  // hamburger toggles nav on small screens
+  // mobile hamburger toggling
   hamburger.addEventListener('click', () => {
-    if (nav.style.display === 'flex') {
-      nav.style.display = '';
-      nav.style.flexDirection = '';
-      nav.style.position = '';
-      nav.style.top = '';
-      nav.style.right = '';
-      nav.style.background = '';
-      nav.style.padding = '';
-      nav.style.borderRadius = '';
-      nav.style.boxShadow = '';
-    } else {
+    if(nav.style.display === 'flex'){ nav.style.display=''; } else {
       nav.style.display = 'flex';
       nav.style.flexDirection = 'column';
       nav.style.position = 'absolute';
@@ -701,31 +675,97 @@ footer { margin-top:60px; padding:32px 18px; text-align:center; color:#9aa3ad; f
     }
   });
 
-  // close mobile menu on nav link click
   navLinks.forEach(a => a.addEventListener('click', () => {
-    if (window.innerWidth < 900) {
-      nav.style.display = 'none';
-    }
+    if(window.innerWidth < 900) nav.style.display = 'none';
   }));
-
 })();
 
-/* =======================
-   small helper for placeholders in contacts
-   ======================= */
+/* =========================
+   FORM: Formspree AJAX submit + progress ring on submit
+   ========================= */
+(function formspreeSetup(){
+  const form = document.getElementById('contactForm');
+  const statusEl = document.getElementById('formStatus');
+  const submitBtn = document.getElementById('formSubmit');
+
+  if(!form) return;
+  // helper: show temporary status
+  function showStatus(msg, ok=true){
+    statusEl.textContent = msg;
+    statusEl.style.color = ok ? '#bfe6c5' : '#f7b2b2';
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    // read values
+    const data = {
+      name: form.elements['name'].value,
+      email: form.elements['email'].value,
+      social: form.elements['social'].value,
+      message: form.elements['message'].value,
+      // you can add extras: page, timestamp
+      page: window.location.href,
+      timestamp: new Date().toISOString()
+    };
+
+    // basic validation
+    if(!data.name || !data.email || !data.message){
+      showStatus('Užpildyk visus privalomus laukus.', false);
+      return;
+    }
+
+    // visual: disable button and show spinner
+    submitBtn.disabled = true;
+    const origText = submitBtn.innerHTML;
+    submitBtn.innerHTML = 'Siunčiama…';
+
+    showStatus('Siunčiama…');
+
+    // POST to Formspree
+    try{
+      const resp = await fetch(FORMSPREE_ENDPOINT = formspree.io/f/mreezwzg {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+      const json = await resp.json();
+      if(resp.ok || json.ok || json.success){
+        showStatus('Žinutė išsiųsta — ačiū!', true);
+        submitBtn.innerHTML = 'Išsiųsta';
+        // reset form
+        form.reset();
+        setTimeout(()=> { submitBtn.disabled = false; submitBtn.innerHTML = origText; showStatus(''); }, 2500);
+      } else {
+        // Formspree responds with errors in JSON structure
+        showStatus('Klaida siunčiant. Patikrink duomenis arba pabandyk vėliau.', false);
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = origText;
+      }
+    } catch(err){
+      console.error('Formspree error', err);
+      showStatus('Tinklapių klaida. Pabandyk vėliau.', false);
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = origText;
+    }
+  });
+})();
+
+/* =========================
+   Small helper for placeholders (discord / tiktok)
+   ========================= */
 (function fillPlaceholders(){
-  // Example usage:
-  // document.getElementById('discordPlaceholder').textContent = 'discordUser#1234';
-  // document.getElementById('tiktokPlaceholder').textContent = '@tiktokuser';
+  // Example: uncomment & set your handles
+  // document.getElementById('discordPlaceholder').textContent = 'YourName#1234';
+  // document.getElementById('tiktokPlaceholder').textContent = '@yourtik';
   // document.getElementById('emailPlaceholder').textContent = 'you@domain.lt';
 })();
 
-/* =======================
-   accessibility: keyboard nav hint
-   ======================= */
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Tab') document.body.classList.add('user-is-tabbing');
-});
+/* accessibility: show focus styles when tabbing */
+document.addEventListener('keydown', (e) => { if(e.key === 'Tab') document.body.classList.add('user-is-tabbing'); });
+
 </script>
 </body>
 </html>
