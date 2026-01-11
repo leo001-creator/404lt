@@ -4,67 +4,94 @@
   <meta charset="UTF-8">
   <title>404.lt – Pamirštos vietos</title>
   <style>
-    /* --- Bendra stiliaus dalis --- */
-    body {
+    /* --- Reset ir bendra --- */
+    * {
+      box-sizing: border-box;
       margin: 0;
-      background: #0a0a0a; /* dar tamsesnis fonas */
-      color: #e5e5e5;
+      padding: 0;
+    }
+
+    body {
       font-family: 'Arial', sans-serif;
+      background: #0a0a0a;
+      color: #e5e5e5;
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* --- Viršutinė meniu juosta --- */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background: rgba(20,20,20,0.95);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 40px;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    header h1 {
+      font-size: 24px;
+      color: #ff4c4c;
+      letter-spacing: 2px;
+    }
+
+    nav a {
+      margin-left: 25px;
+      font-weight: bold;
+      color: #e5e5e5;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: #ff4c4c;
+      transform: scale(1.1);
+    }
+
+    /* --- Pagrindinis turinys --- */
+    main {
+      margin-top: 80px;
       text-align: center;
     }
 
-    h1 {
-      margin-top: 20px;
-      font-size: 50px;
-      letter-spacing: 3px;
-      color: #ff4c4c;
-      text-shadow: 0 0 10px #ff4c4c;
-    }
-
     h2 {
-      color: #f0f0f0;
-      text-shadow: 0 0 5px #000;
-      margin-top: 30px;
+      font-size: 36px;
+      margin: 20px 0;
+      color: #ff9f1c;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s forwards;
+      animation-delay: 0.5s;
     }
 
-    p {
-      color: #aaa;
-      margin-bottom: 20px;
-    }
-
-    /* --- Iframe žemėlapiui --- */
-    iframe {
+    /* --- Žemėlapis --- */
+    .map-container {
       width: 90%;
-      height: 70vh;
-      border: 2px solid #333;
-      border-radius: 8px;
-      box-shadow: 0 0 20px #222;
-      transition: transform 0.3s ease;
-    }
-
-    iframe:hover {
-      transform: scale(1.02);
-      box-shadow: 0 0 30px #ff4c4c;
-    }
-
-    /* --- Taisyklės --- */
-    .rules {
-      background: #111;
-      color: #ccc;
-      width: 90%;
-      margin: 20px auto;
-      padding: 15px;
+      max-width: 1200px;
+      margin: 0 auto 50px auto;
       border-radius: 10px;
-      border: 1px solid #333;
-      text-align: left;
+      overflow: hidden;
+      box-shadow: 0 0 30px #222;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      opacity: 0;
+      animation: fadeInUp 1s forwards;
+      animation-delay: 1s;
     }
 
-    .rules ul {
-      padding-left: 20px;
-    }
-
-    .rules li {
-      margin-bottom: 10px;
+    .map-container iframe {
+      width: 100%;
+      height: 75vh;
+      border: none;
+      transition: none; /* pašalintas hover blur efektas */
     }
 
     /* --- Slaptos vietos --- */
@@ -72,124 +99,146 @@
       background: #111;
       color: #ff9f1c;
       width: 90%;
-      margin: 20px auto;
-      padding: 15px;
+      max-width: 1000px;
+      margin: 0 auto 50px auto;
+      padding: 20px;
       border-radius: 10px;
       border: 1px solid #333;
-      text-align: left;
+      box-shadow: 0 0 20px #222;
+      opacity: 0;
+      animation: fadeInUp 1s forwards;
+      animation-delay: 1.5s;
     }
 
     .secret-places li {
       margin-bottom: 10px;
       font-style: italic;
-    }
-
-    /* --- Kontaktų forma --- */
-    .contact-form {
-      background: #111;
-      color: #fff;
-      width: 90%;
-      max-width: 500px;
-      margin: 20px auto 50px auto;
-      padding: 20px;
-      border-radius: 10px;
-      border: 1px solid #333;
-      box-shadow: 0 0 15px #222;
-      text-align: left;
-    }
-
-    .contact-form label {
-      display: block;
-      margin-bottom: 5px;
-      margin-top: 10px;
-      font-weight: bold;
-    }
-
-    .contact-form input,
-    .contact-form textarea {
-      width: 100%;
-      padding: 8px;
-      border-radius: 5px;
-      border: 1px solid #444;
-      background: #0a0a0a;
-      color: #e5e5e5;
-      resize: none;
-    }
-
-    .contact-form button {
-      margin-top: 15px;
-      padding: 10px 20px;
-      background: #ff4c4c;
-      border: none;
-      border-radius: 5px;
-      color: #fff;
-      font-weight: bold;
-      cursor: pointer;
       transition: 0.3s;
     }
 
-    .contact-form button:hover {
-      background: #ff0000;
+    .secret-places li:hover {
+      color: #ff4c4c;
+      transform: scale(1.05);
+    }
+
+    /* --- Mygtukas atgal į viršų --- */
+    .scroll-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #ff4c4c;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 0 15px #ff4c4c;
+      transition: 0.3s;
+      opacity: 0.7;
+      z-index: 100;
+    }
+
+    .scroll-top:hover {
+      transform: scale(1.2);
+      opacity: 1;
     }
 
     /* --- Footeris --- */
     footer {
-      margin-top: 40px;
-      padding: 10px;
-      font-size: 12px;
+      position: sticky;
+      bottom: 0;
+      width: 100%;
+      background: #111;
+      padding: 15px;
+      text-align: center;
       color: #666;
+      font-size: 13px;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
+    }
+
+    /* --- Animacijos --- */
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* --- Smooth scroll --- */
+    html {
+      scroll-behavior: smooth;
     }
   </style>
 </head>
 <body>
 
-  <h1>404</h1>
-  <p>Pamirštos vietos Lietuvoje</p>
+  <!-- Meniu juosta -->
+  <header>
+    <h1>404.lt</h1>
+    <nav>
+      <a href="#map">Žemėlapis</a>
+      <a href="#secrets">Slaptos vietos</a>
+    </nav>
+  </header>
 
-  <!-- Žemėlapis -->
-  <iframe src="https://www.google.com/maps/d/u/0/embed?mid=19QHh2E1I7QKqMvTN9FCtXeXCQyja2yU&ehbc=2E312F&noprof=1"></iframe>
+  <main>
+    <h2>Pamirštos vietos Lietuvoje</h2>
 
-  <!-- Taisyklės -->
-  <div class="rules">
-    <h2>Taisyklės</h2>
-    <ul>
-      <li>Gerbk kitus naudotojus.</li>
-      <li>Neskelbk tikslių koordinačių be leidimo.</li>
-      <li>Neplatink pavojingų vietų.</li>
-      <li>Naudok žemėlapį atsakingai.</li>
-    </ul>
-  </div>
+    <!-- Žemėlapis -->
+    <div class="map-container" id="map">
+      <iframe src="https://www.google.com/maps/d/u/0/embed?mid=19QHh2E1I7QKqMvTN9FCtXeXCQyja2yU&ehbc=2E312F&noprof=1"></iframe>
+    </div>
 
-  <!-- Slaptos vietos -->
-  <div class="secret-places">
-    <h2>Slaptos vietos</h2>
-    <ul>
-      <li>Miško paslaptis #1 🌲</li>
-      <li>Pamirštas tiltas #2 🌉</li>
-      <li>Senovinis bunkeris #3 🕳️</li>
-    </ul>
-  </div>
+    <!-- Slaptos vietos -->
+    <div class="secret-places" id="secrets">
+      <h2>Slaptos vietos</h2>
+      <ul>
+        <li>Miško paslaptis #1 🌲</li>
+        <li>Pamirštas tiltas #2 🌉</li>
+        <li>Senovinis bunkeris #3 🕳️</li>
+        <li>Paslaptinga pilis #4 🏰</li>
+        <li>Senų laikų kelias #5 🛤️</li>
+      </ul>
+    </div>
+  </main>
 
-  <!-- Kontaktų forma -->
-  <div class="contact-form">
-    <h2>Susisiekite su mumis</h2>
-    <form action="mailto:tavo@email.com" method="post" enctype="text/plain">
-      <label for="name">Vardas:</label>
-      <input type="text" id="name" name="name" required>
+  <!-- Mygtukas grįžti į viršų -->
+  <button class="scroll-top" onclick="window.scrollTo({top:0, behavior:'smooth'});">↑</button>
 
-      <label for="email">El. paštas:</label>
-      <input type="email" id="email" name="email" required>
-
-      <label for="message">Žinutė:</label>
-      <textarea id="message" name="message" rows="5" required></textarea>
-
-      <button type="submit">Siųsti</button>
-    </form>
-  </div>
-
+  <!-- Footeris -->
   <footer>
-    &copy; 2026 404.lt – Visi teisės saugomos
+    &copy; 2026 404.lt – Pamirštos vietos Lietuvoje
   </footer>
 
+  <!-- Papildomas JS animacijoms (fade-in ir scroll-top) -->
+  <script>
+    // Scroll-top mygtuko rodymas tik kai scroll >= 300px
+    const scrollBtn = document.querySelector('.scroll-top');
+    window.addEventListener('scroll', () => {
+      if(window.scrollY > 300) {
+        scrollBtn.style.display = 'block';
+      } else {
+        scrollBtn.style.display = 'none';
+      }
+    });
+
+    // Papildoma fade-in animacija elementams scroll metu
+    const faders = document.querySelectorAll('.map-container, .secret-places');
+    const appearOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+    const appearOnScroll = new IntersectionObserver((entries, appearOnScroll) => {
+      entries.forEach(entry => {
+        if(!entry.isIntersecting) return;
+        entry.target.style.opacity = 1;
+        entry.target.style.transform = 'translateY(0)';
+        appearOnScroll.unobserve(entry.target);
+      });
+    }, appearOptions);
+
+    faders.forEach(fader => {
+      appearOnScroll.observe(fader);
+    });
+  </script>
 </body>
 </html>
