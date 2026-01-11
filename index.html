@@ -1,189 +1,633 @@
 <!DOCTYPE html>
 <html lang="lt">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>404.lt – Pamirštos vietos</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Pamirštos vietos Lietuvoje – atrask slaptas ir pamirštas vietas su mūsų interaktyviu žemėlapiu.">
-<link rel="icon" href="https://via.placeholder.com/32x32.png?text=404">
+<meta name="description" content="404.lt – pamirštos ir slaptos vietos Lietuvoje. Interaktyvus žemėlapis, galerija ir istorijos." />
+<link rel="icon" href="https://via.placeholder.com/32x32.png?text=404" />
+
 <style>
-  /* RESET */
-  * { box-sizing:border-box; margin:0; padding:0; }
-  html { scroll-behavior: smooth; }
-  body { font-family: 'Arial', sans-serif; background:#0a0a0a; color:#e5e5e5; overflow-x:hidden; position:relative; }
+/* =========================
+   GLOBAL RESET & BASICS
+   ========================= */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  background: radial-gradient( circle at 10% 10%, rgba(255,76,76,0.04), transparent 5%),
+              radial-gradient( circle at 90% 80%, rgba(249,159,28,0.03), transparent 8%),
+              #060607;
+  color: #e9ecef;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
 
-  /* PRELOADER */
-  #preloader {position:fixed;top:0;left:0;width:100%;height:100%;background:#0a0a0a;display:flex;align-items:center;justify-content:center;z-index:9999;}
-  #preloader div {width:50px;height:50px;border:5px solid #333;border-top:5px solid #ff4c4c;border-radius:50%;animation:spin 1s linear infinite;}
-  @keyframes spin {100%{transform:rotate(360deg);}}
+/* nice default link focus */
+a { color: inherit; text-decoration: none; outline: none; }
+a:focus { box-shadow: 0 0 0 3px rgba(255,76,76,0.18); border-radius: 6px; }
 
-  /* HEADER / NAV */
-  header {position:fixed;top:0;left:0;width:100%;height:60px;background:rgba(20,20,20,0.95);display:flex;justify-content:space-between;align-items:center;padding:0 40px;z-index:1000;box-shadow:0 2px 10px rgba(0,0,0,0.5);}
-  header h1 {font-size:24px;color:#ff4c4c;letter-spacing:2px;}
-  nav a {margin-left:25px;font-weight:bold;color:#e5e5e5;transition:0.3s;}
-  nav a:hover, nav a.active {color:#ff4c4c; transform:scale(1.1);}
+/* =========================
+   PRELOADER
+   ========================= */
+#preloader {
+  position: fixed; inset: 0; display:flex; align-items:center; justify-content:center;
+  background: #060607; z-index: 99999;
+}
+#preloader .spinner {
+  width:70px; height:70px; border-radius:50%;
+  background: conic-gradient(#ff4c4c 0 25%, #ff9f1c 25% 50%, #9f9f9f 50% 100%);
+  animation: spin 1.2s linear infinite;
+  box-shadow: 0 0 30px rgba(255,76,76,0.15);
+}
+@keyframes spin { to { transform: rotate(360deg);} }
 
-  /* HERO SECTION */
-  .hero {height:100vh;background:url('https://via.placeholder.com/1920x1080.png?text=Pamirštos+vietos') center/cover no-repeat;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative;overflow:hidden;}
-  .hero h2 {font-size:48px;color:#ff9f1c;text-shadow:0 0 10px #000;opacity:0;animation:fadeInUp 1s forwards;}
-  .hero p {color:#ccc;font-size:20px;margin-top:15px;opacity:0;animation:fadeInUp 1s forwards;animation-delay:0.5s;}
+/* =========================
+   MOVING BACKGROUND (GRADIENT + LINES)
+   ========================= */
+.bg-lines {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.12;
+  background-image:
+    linear-gradient(90deg, rgba(255,76,76,0.06) 0.5px, transparent 0.5px),
+    linear-gradient(180deg, rgba(255,159,28,0.03) 0.5px, transparent 0.5px);
+  background-size: 400px 400px, 300px 300px;
+  animation: moveGrid 40s linear infinite, shiftHue 20s linear infinite;
+  mix-blend-mode: screen;
+}
+@keyframes moveGrid {
+  from { background-position: 0 0, 0 0; }
+  to { background-position: 400px 400px, -300px -300px; }
+}
+@keyframes shiftHue {
+  0% { filter: hue-rotate(0deg); }
+  50% { filter: hue-rotate(20deg) saturate(1.1); }
+  100% { filter: hue-rotate(0deg); }
+}
 
-  /* Moving background particles */
-  .particle {position:absolute;width:5px;height:5px;background:#ff4c4c;border-radius:50%;opacity:0.5;animation:moveParticle 15s linear infinite;}
-  @keyframes moveParticle {
-    0% {transform:translate(0,0);}
-    50% {transform:translate(100vw,50vh);}
-    100% {transform:translate(0,100vh);}
-  }
+/* subtle animated linear streaks */
+.bg-streaks {
+  position: fixed; inset:0; z-index: 0; pointer-events:none; overflow:hidden; opacity:0.06;
+}
+.bg-streaks .streak {
+  position:absolute;
+  width:180%; height:1px;
+  background: linear-gradient(90deg, transparent, rgba(255,76,76,0.8), transparent);
+  top:20%; left:-40%;
+  transform: rotate(-4deg);
+  animation: streakMove 12s linear infinite;
+  filter: blur(6px);
+}
+.bg-streaks .streak.two { top:60%; animation-duration:18s; transform: rotate(-2deg); opacity:0.45; }
+@keyframes streakMove { from { left:-100%; } to { left:100%; } }
 
-  /* MAIN */
-  main {margin-top:60px;}
-  h3 {font-size:36px;margin:30px 0;color:#ff9f1c;opacity:0;animation:fadeInUp 1s forwards;}
+/* =========================
+   STARFIELD (canvas)
+   ========================= */
+#starfield { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.15; }
 
-  /* MAP */
-  .map-container {width:90%;max-width:1200px;margin:50px auto;border-radius:10px;overflow:hidden;box-shadow:0 0 30px #ff4c4c;transition:transform 0.3s ease,box-shadow 0.3s ease;opacity:0;animation:fadeInUp 1s forwards; border:3px solid #ff4c4c; position:relative;}
-  .map-container iframe {width:100%;height:75vh;border:none;}
+/* =========================
+   HEADER / NAV
+   ========================= */
+header {
+  position: fixed; top:0; left:0; right:0; height:66px; z-index: 999;
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 0 28px;
+  background: linear-gradient(180deg, rgba(6,6,7,0.8), rgba(6,6,7,0.35));
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  backdrop-filter: blur(6px);
+}
+.brand {
+  display:flex; align-items:center; gap:12px;
+}
+.brand .logo {
+  width:40px; height:40px; border-radius:8px;
+  background: linear-gradient(135deg,#ff4c4c,#ff9f1c);
+  box-shadow: 0 6px 20px rgba(255,76,76,0.14), inset 0 -6px 10px rgba(0,0,0,0.25);
+  display:flex; align-items:center; justify-content:center; font-weight:bold; color:#111;
+}
+.brand h1 { font-size:18px; letter-spacing:2px; color:#fff; }
+nav { display:flex; gap:18px; align-items:center; }
+nav a { color:#e9ecef; font-weight:600; padding:8px 10px; border-radius:6px; transition: all .18s ease; font-size:14px; }
+nav a:hover, nav a.active { color:#060607; background: linear-gradient(90deg,#ff4c4c,#ff9f1c); transform: translateY(-3px); box-shadow: 0 6px 20px rgba(255,76,76,0.12); }
 
-  /* SECRET PLACES */
-  .secret-places {background:#111;color:#ff9f1c;width:90%;max-width:1000px;margin:50px auto;padding:20px;border-radius:10px;border:1px solid #333;box-shadow:0 0 20px #222;opacity:0;animation:fadeInUp 1s forwards;}
-  .secret-places li {margin-bottom:10px;font-style:italic;transition:0.3s;}
-  .secret-places li:hover {color:#ff4c4c;transform:scale(1.05);}
+/* hamburger for mobile */
+.hamburger { display:none; width:36px; height:36px; background:transparent; border-radius:8px; align-items:center; justify-content:center; cursor:pointer; }
+.hamburger .bar { width:20px; height:2px; background:#e9ecef; display:block; margin:3px 0; transition: transform .2s ease; }
 
-  /* ABOUT / NEWS / GALLERY */
-  .section {width:90%;max-width:1000px;margin:50px auto;padding:20px;border-radius:10px;background:#111;box-shadow:0 0 20px #222;opacity:0;animation:fadeInUp 1s forwards;}
-  .gallery {display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;}
-  .gallery img {width:100%;border-radius:10px;transition:0.3s;}
-  .gallery img:hover {transform:scale(1.05);box-shadow:0 0 20px #ff4c4c;}
+/* =========================
+   HERO
+   ========================= */
+.hero {
+  position: relative; height:78vh; min-height:520px; display:flex; align-items:center; justify-content:center;
+  text-align:center; padding: 0 20px; z-index: 2;
+  overflow:visible;
+}
+.hero .content { max-width:960px; z-index:5; }
+.hero h2 {
+  font-size: clamp(28px, 4vw, 56px);
+  color: #fff; line-height:1.02; letter-spacing: 1px;
+  text-shadow: 0 6px 30px rgba(0,0,0,0.8), 0 0 40px rgba(255,76,76,0.08);
+  transform: translateY(10px); opacity:0;
+}
+.hero p {
+  margin-top:14px; color:#d6d6d6; font-size:18px; opacity:0; transform: translateY(10px);
+}
+.hero .cta {
+  margin-top:22px; display:flex; gap:12px; justify-content:center; opacity:0; transform: translateY(10px);
+}
+.btn {
+  padding:10px 18px; border-radius:8px; font-weight:700; cursor:pointer; border:none;
+  transition: all .22s ease;
+}
+.btn.ghost { background:transparent; color:#e9ecef; border:1px solid rgba(255,255,255,0.06); }
+.btn.primary { background: linear-gradient(90deg,#ff4c4c,#ff9f1c); color:#060607; box-shadow:0 10px 30px rgba(255,76,76,0.12); transform-origin:center; }
+.btn.primary:hover { transform: translateY(-4px) scale(1.02); }
 
-  /* SCROLL TOP */
-  .scroll-top {position:fixed;bottom:30px;right:30px;background:#ff4c4c;color:#fff;border:none;border-radius:50%;width:50px;height:50px;font-size:24px;cursor:pointer;box-shadow:0 0 15px #ff4c4c;transition:0.3s;opacity:0.7;z-index:100;}
-  .scroll-top:hover {transform:scale(1.2);opacity:1;}
+/* subtle animated underline */
+.hero h2::after { content:''; display:block; width:140px; height:6px; margin:16px auto 0; border-radius:6px; background: linear-gradient(90deg, rgba(255,76,76,0.9), rgba(255,159,28,0.8)); opacity:0; transform: scaleX(.6); transition: all .6s cubic-bezier(.2,.9,.3,1); }
 
-  /* FOOTER */
-  footer {position:sticky;bottom:0;width:100%;background:#111;padding:15px;text-align:center;color:#666;font-size:13px;box-shadow:0 -2px 10px rgba(0,0,0,0.5);}
+/* =========================
+   MAIN / MAP / SECTIONS
+   ========================= */
+main { position: relative; z-index: 3; padding-bottom: 120px; }
 
+/* container common */
+.container { width:92%; max-width:1200px; margin: 30px auto; }
+
+/* MAP */
+.map-wrap {
+  position: relative; border-radius:14px; overflow:hidden; padding:12px;
+  background: linear-gradient(180deg, rgba(255,76,76,0.03), rgba(255,159,28,0.02));
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 60px rgba(255,76,76,0.06);
+  border: 2px solid rgba(255,76,76,0.08);
+  transition: transform .28s ease, box-shadow .28s ease;
+}
+.map-wrap:hover { transform: translateY(-6px); box-shadow: 0 30px 80px rgba(0,0,0,0.65), 0 0 120px rgba(255,76,76,0.12); }
+
+/* main iframe */
+.map-iframe { width:100%; height:72vh; min-height:420px; border:0; display:block; }
+
+/* RED GLOW AROUND MAP */
+.map-wrap::before {
+  content:''; position:absolute; inset:-6px; z-index:1; border-radius:18px;
+  background: radial-gradient(closest-side, rgba(255,76,76,0.12), transparent 40%);
+  filter: blur(14px);
+  pointer-events:none;
+}
+
+/* overlay layer (markers + tooltips) */
+.map-overlay {
+  position:absolute; inset:12px; z-index:4; pointer-events:none; /* pointer events toggled per marker */
+  display:block;
+}
+
+/* marker */
+.marker {
+  position:absolute; width:18px; height:18px; border-radius:50%;
+  background: radial-gradient(circle at 30% 30%, #fff, #ff4c4c 40%);
+  box-shadow: 0 6px 18px rgba(255,76,76,0.25), 0 0 8px rgba(255,76,76,0.35);
+  transform: translate(-50%,-50%) scale(1);
+  cursor:pointer; pointer-events:auto;
+  transition: transform .18s ease;
+}
+/* pulse ring */
+.marker::after {
+  content:''; position:absolute; inset: -8px; border-radius:50%; pointer-events:none;
+  box-shadow: 0 0 0 3px rgba(255,76,76,0.12);
+  animation: pulse 2.4s infinite;
+}
+@keyframes pulse {
+  0% { transform: scale(.9); opacity: 0.7; }
+  70% { transform: scale(1.6); opacity: 0; }
+  100% { transform: scale(.9); opacity: 0; }
+}
+
+/* tooltip */
+.tooltip {
+  position:absolute; transform: translate(-50%,-140%); min-width:160px; max-width:260px;
+  background: linear-gradient(180deg,#111,#0b0b0b);
+  color:#fff; padding:10px 12px; border-radius:8px; pointer-events:auto;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  opacity:0; visibility:hidden; transition: all .18s ease; font-size:13px; text-align:left;
+  border: 1px solid rgba(255,76,76,0.06);
+}
+.tooltip h4 { font-size:14px; margin-bottom:6px; color:#ff9f1c; }
+.tooltip small { display:block; color:#bdbdbd; margin-top:6px; font-size:12px; }
+
+/* tiny connector arrow */
+.tooltip::after {
+  content:''; position:absolute; left:50%; bottom:-7px; transform:translateX(-50%);
+  width:12px; height:12px; background:inherit; transform-origin: center; transform: translateX(-50%) rotate(45deg);
+  border-left: 1px solid rgba(255,76,76,0.06);
+  border-bottom: 1px solid rgba(255,76,76,0.06);
+}
+
+/* SECTIONS (slaptos vietos etc) */
+.section {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius:12px; padding:22px; margin: 34px auto;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+  border:1px solid rgba(255,255,255,0.02);
+}
+
+/* secret list */
+.secret-list li { margin:10px 0; font-style: italic; color:#ffd5a8; transition: transform .18s ease, color .18s ease; cursor:default; }
+.secret-list li:hover { transform: translateX(6px); color:#ffdfc9; }
+
+/* gallery */
+.gallery { display:grid; gap:12px; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); }
+.gallery img { width:100%; height:150px; object-fit:cover; border-radius:10px; border:1px solid rgba(255,255,255,0.03); transition: transform .24s ease, box-shadow .24s ease; }
+.gallery img:hover { transform: scale(1.03); box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
+
+/* FOOTER */
+footer {
+  margin-top:60px; padding:32px 18px; text-align:center; color:#9aa3ad; font-size:14px;
+  border-top:1px solid rgba(255,255,255,0.02); background: linear-gradient(180deg, rgba(0,0,0,0.03), transparent);
+  position: sticky; bottom: 0;
+}
+
+/* SCROLL TOP */
+.scroll-top {
+  position: fixed; right:20px; bottom:24px; width:52px; height:52px; border-radius:50%;
+  background: linear-gradient(90deg,#ff4c4c,#ff9f1c); color:#060607; font-weight:800; font-size:20px;
+  display:flex; align-items:center; justify-content:center; z-index: 9999; cursor:pointer; box-shadow: 0 12px 40px rgba(255,76,76,0.12);
+  transition: transform .18s ease, opacity .18s ease; opacity:0; pointer-events:none;
+}
+.scroll-top.show { opacity:1; pointer-events:auto; transform: translateY(-6px); }
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+@media (max-width: 900px) {
+  header { padding: 0 16px; }
+  nav { display: none; }
+  .hamburger { display:flex; }
+  .hero { height:60vh; min-height:440px; padding:10px; }
+  .map-iframe { height:62vh; }
+  .tooltip { font-size:12px; min-width:140px; max-width:210px; }
+}
+
+/* small helper classes for animations (applied by JS) */
+.revealed { opacity: 1 !important; transform: none !important; transition: all .6s cubic-bezier(.2,.9,.3,1); }
+.fade-delay-1 { transition-delay: .2s; }
+.fade-delay-2 { transition-delay: .5s; }
+.fade-delay-3 { transition-delay: .8s; }
 </style>
 </head>
+
 <body>
 
-<!-- PRELOADER -->
-<div id="preloader"><div></div></div>
+<!-- Preloader -->
+<div id="preloader"><div class="spinner" aria-hidden="true"></div></div>
 
-<!-- HERO SECTION -->
-<section class="hero" id="hero">
-  <h2>Pamirštos vietos Lietuvoje</h2>
-  <p>Atrask slaptas ir pamirštas vietas su mūsų interaktyviu žemėlapiu</p>
-  <!-- Particles -->
-  <div class="particle" style="top:10%;left:20%;width:4px;height:4px;"></div>
-  <div class="particle" style="top:50%;left:70%;width:3px;height:3px;"></div>
-  <div class="particle" style="top:80%;left:40%;width:5px;height:5px;"></div>
-</section>
+<!-- Background decorative layers -->
+<div class="bg-lines" aria-hidden="true"></div>
+<div class="bg-streaks" aria-hidden="true"><div class="streak"></div><div class="streak two"></div></div>
+<canvas id="starfield" aria-hidden="true"></canvas>
 
-<!-- HEADER -->
-<header>
-  <h1>404.lt</h1>
-  <nav>
+<!-- Header -->
+<header role="banner">
+  <div class="brand">
+    <div class="logo" aria-hidden="true">404</div>
+    <h1>404.lt</h1>
+  </div>
+
+  <nav role="navigation" aria-label="Pagrindinis meniu">
     <a href="#hero">Pradžia</a>
     <a href="#map">Žemėlapis</a>
     <a href="#secrets">Slaptos vietos</a>
-    <a href="#about">Apie projektą</a>
+    <a href="#about">Apie</a>
     <a href="#news">Naujienos</a>
     <a href="#gallery">Galerija</a>
   </nav>
+
+  <!-- mobile hamburger (JS toggles menu) -->
+  <button class="hamburger" aria-label="Atidaryti meniu" id="hamburgerBtn">
+    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+  </button>
 </header>
 
+<!-- HERO -->
+<section id="hero" class="hero" role="region" aria-label="Pagrindinė">
+  <div class="content">
+    <h2 id="heroTitle">Pamirštos vietos Lietuvoje</h2>
+    <p id="heroSub">Atrask slaptas vietas, istorijas ir nuotraukas. Žemėlapis nuolat atnaujinamas.</p>
+    <div class="cta">
+      <button class="btn primary" onclick="document.getElementById('map').scrollIntoView({behavior:'smooth'})">Žiūrėti žemėlapį</button>
+      <a class="btn ghost" href="#secrets">Slaptos vietos</a>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN -->
 <main>
-  <!-- MAP -->
-  <div class="map-container" id="map">
-    <iframe src="https://www.google.com/maps/d/u/0/embed?mid=19QHh2E1I7QKqMvTN9FCtXeXCQyja2yU&ehbc=2E312F&noprof=1"></iframe>
+
+  <!-- MAP SECTION -->
+  <div id="map" class="container map-wrap section" role="region" aria-label="Žemėlapis">
+    <!-- iframe -->
+    <iframe class="map-iframe" src="https://www.google.com/maps/d/u/0/embed?mid=19QHh2E1I7QKqMvTN9FCtXeXCQyja2yU&ehbc=2E312F&noprof=1" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="404.lt žemėlapis"></iframe>
+
+    <!-- Overlay for animated markers (positioned by percentage) -->
+    <div class="map-overlay" id="mapOverlay" aria-hidden="false">
+      <!-- Example markers (left %, top %) - adjust later -->
+      <div class="marker" data-left="18" data-top="38" data-title="Miško paslaptis #1" data-desc="Trumpas aprašymas apie vietą." style="left:18%; top:38%;"></div>
+      <div class="marker" data-left="62" data-top="24" data-title="Pamirštas tiltas #2" data-desc="Pasiekiama tik pėsčiomis." style="left:62%; top:24%;"></div>
+      <div class="marker" data-left="45" data-top="66" data-title="Senovinis bunkeris #3" data-desc="Užaugęs samanom."></div>
+      <div class="marker" data-left="82" data-top="54" data-title="Paslaptinga pilis #4" data-desc="Reikalingas leidimas."></div>
+      <!-- tooltips will be appended dynamically by JS when marker hovered/clicked -->
+    </div>
   </div>
 
-  <!-- SECRET PLACES -->
-  <div class="secret-places" id="secrets">
-    <h3>Slaptos vietos</h3>
-    <ul>
-      <li>Miško paslaptis #1 🌲</li>
-      <li>Pamirštas tiltas #2 🌉</li>
-      <li>Senovinis bunkeris #3 🕳️</li>
-      <li>Paslaptinga pilis #4 🏰</li>
-      <li>Senų laikų kelias #5 🛤️</li>
+  <!-- SLAPTI -->
+  <div id="secrets" class="container section" role="region" aria-label="Slaptos vietos">
+    <h2 style="color:#ff9f1c; margin-bottom:12px;">Slaptos vietos</h2>
+    <ul class="secret-list">
+      <li>Miško paslaptis #1 — trumpas užuomina (be koord.)</li>
+      <li>Pamirštas tiltas #2 — tiltas be pavadinimo</li>
+      <li>Senovinis bunkeris #3 — prie miško tako</li>
+      <li>Paslaptinga pilis #4 — draudžiama teritorija</li>
+      <li>Senų laikų kelias #5 — pravažiuok tyliai</li>
     </ul>
   </div>
 
   <!-- ABOUT -->
-  <div class="section" id="about">
-    <h3>Apie projektą</h3>
-    <p>404.lt – projektas, skirtas atrasti pamirštas ir slaptas vietas Lietuvoje. Čia rasi žemėlapius, nuotraukas ir paslėptus taškus, kurių dažniausiai nerasi įprastuose žemėlapiuose.</p>
+  <div id="about" class="container section" role="region" aria-label="Apie projektą">
+    <h2 style="color:#ff9f1c; margin-bottom:12px;">Apie projektą</h2>
+    <p>404.lt – bendruomeninis projektas, skirtas rinkti ir saugoti prisiminimus apie pamirštas vietas Lietuvoje.
+      Kviečiame siųsti nuotraukas ir trumpus aprašymus (kontaktai ateityje). Projektas netoleruoja žalos gamtai ir privatumo pažeidimų.</p>
   </div>
 
   <!-- NEWS -->
-  <div class="section" id="news">
-    <h3>Naujienos</h3>
+  <div id="news" class="container section" role="region" aria-label="Naujienos">
+    <h2 style="color:#ff9f1c; margin-bottom:12px;">Naujienos</h2>
     <ul>
-      <li>2026-01-11 – Pridėtos naujos slaptos vietos.</li>
-      <li>2026-01-10 – Patobulintas žemėlapio dizainas.</li>
-      <li>2026-01-09 – Svetainė pasiekiama mobiliesiems.</li>
+      <li><strong>2026-01-11</strong> – Pridėtos naujos slaptos vietos.</li>
+      <li><strong>2026-01-10</strong> – Pilnas „MAX“ dizaino atnaujinimas.</li>
+      <li><strong>2026-01-09</strong> – Galerija su vietų nuotraukomis.</li>
     </ul>
   </div>
 
   <!-- GALLERY -->
-  <div class="section" id="gallery">
-    <h3>Galerija</h3>
+  <div id="gallery" class="container section" role="region" aria-label="Galerija">
+    <h2 style="color:#ff9f1c; margin-bottom:12px;">Galerija</h2>
     <div class="gallery">
-      <img src="https://via.placeholder.com/400x250.png?text=Vieta+1" alt="Vieta 1">
-      <img src="https://via.placeholder.com/400x250.png?text=Vieta+2" alt="Vieta 2">
-      <img src="https://via.placeholder.com/400x250.png?text=Vieta+3" alt="Vieta 3">
-      <img src="https://via.placeholder.com/400x250.png?text=Vieta+4" alt="Vieta 4">
+      <img src="https://via.placeholder.com/800x600.png?text=Vieta+1" alt="Vieta 1">
+      <img src="https://via.placeholder.com/800x600.png?text=Vieta+2" alt="Vieta 2">
+      <img src="https://via.placeholder.com/800x600.png?text=Vieta+3" alt="Vieta 3">
+      <img src="https://via.placeholder.com/800x600.png?text=Vieta+4" alt="Vieta 4">
     </div>
   </div>
+
 </main>
 
-<!-- SCROLL TOP -->
-<button class="scroll-top" onclick="window.scrollTo({top:0, behavior:'smooth'});">↑</button>
+<!-- Scroll top -->
+<button class="scroll-top" id="scrollTopBtn" aria-label="Grįžti į viršų">↑</button>
 
-<!-- FOOTER -->
-<footer>
-  &copy; 2026 404.lt – Pamirštos vietos Lietuvoje
+<!-- Footer -->
+<footer role="contentinfo">
+  <div style="max-width:1000px;margin:0 auto;">
+    <div style="display:flex;gap:12px;align-items:center;justify-content:center;margin-bottom:8px;">
+      <div style="width:8px;height:8px;border-radius:50%;background:linear-gradient(90deg,#ff4c4c,#ff9f1c);"></div>
+      <div style="color:#c7d2d9;font-weight:700;">404.lt</div>
+    </div>
+    <div style="color:#9aa3ad;font-size:13px;">© 2026 404.lt — Pamirštos vietos. Visi teisių saugomi. Projektas bendruomeninis.</div>
+  </div>
 </footer>
 
+<!-- =========================
+     SCRIPT: stars, markers, UI
+     ========================= -->
 <script>
-  // PRELOADER
-  window.addEventListener('load',()=>{document.getElementById('preloader').style.display='none';});
+/* ----------------------------
+   PRELOADER hide on load
+   ---------------------------- */
+window.addEventListener('load', () => {
+  const pre = document.getElementById('preloader');
+  pre.style.opacity = '0';
+  setTimeout(()=>pre.remove(), 500);
+  revealInitial(); // start reveal animations
+});
 
-  // FADE-IN scroll animacija
-  const faders = document.querySelectorAll('.map-container, .secret-places, .section');
-  const appearOptions = {threshold:0.1, rootMargin:"0px 0px -50px 0px"};
-  const appearOnScroll = new IntersectionObserver((entries, obs)=>{
+/* ----------------------------
+   STARFIELD (canvas)
+   ---------------------------- */
+(function starfield(){
+  const canvas = document.getElementById('starfield');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let w = canvas.width = innerWidth;
+  let h = canvas.height = innerHeight;
+  const stars = [];
+  const STAR_COUNT = Math.floor((w*h) / 9000); // density
+
+  for(let i=0;i<STAR_COUNT;i++){
+    stars.push({
+      x: Math.random()*w,
+      y: Math.random()*h,
+      r: Math.random()*1.5 + 0.2,
+      alpha: Math.random()*0.8 + 0.2,
+      vx: (Math.random()-0.5)*0.02,
+      vy: (Math.random()-0.2)*0.02
+    });
+  }
+
+  function resize(){ w = canvas.width = innerWidth; h = canvas.height = innerHeight; }
+  addEventListener('resize', resize);
+
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    for(const s of stars){
+      ctx.beginPath();
+      ctx.fillStyle = 'rgba(255,255,255,'+ s.alpha +')';
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx.fill();
+      // subtle twinkle
+      s.alpha += (Math.random()-0.5)*0.02;
+      if(s.alpha < 0.1) s.alpha = 0.1;
+      if(s.alpha > 1) s.alpha = 1;
+      s.x += s.vx;
+      s.y += s.vy;
+      if(s.x < 0) s.x = w;
+      if(s.x > w) s.x = 0;
+      if(s.y < 0) s.y = h;
+      if(s.y > h) s.y = 0;
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ----------------------------
+   HERO reveal animations
+   ---------------------------- */
+function revealInitial(){
+  const h2 = document.querySelector('.hero h2');
+  const p = document.querySelector('.hero p');
+  const cta = document.querySelector('.hero .cta');
+  setTimeout(()=>{ h2.style.opacity = 1; h2.style.transform = 'translateY(0)'; h2.classList.add('revealed'); }, 160);
+  setTimeout(()=>{ p.style.opacity = 1; p.style.transform = 'translateY(0)'; p.classList.add('revealed'); }, 360);
+  setTimeout(()=>{ cta.style.opacity = 1; cta.style.transform = 'translateY(0)'; cta.classList.add('revealed'); }, 560);
+  // underline animate
+  setTimeout(()=>{ document.querySelector('.hero h2').style.setProperty('--u', '1'); document.querySelector('.hero h2').style.opacity = 1; document.querySelector('.hero h2').style.transition = 'all .45s ease'; document.querySelector('.hero h2').style.transform = 'none'; document.querySelector('.hero h2').style['text-decoration'] = 'none'; }, 900);
+}
+
+/* ----------------------------
+   INTERSECTION OBSERVER for sections
+   ---------------------------- */
+(function(){
+  const sections = document.querySelectorAll('.section, .map-wrap, .gallery img, .secret-list li');
+  const obs = new IntersectionObserver((entries, o)=>{
     entries.forEach(entry=>{
-      if(!entry.isIntersecting) return;
-      entry.target.style.opacity = 1;
-      entry.target.style.transform = 'translateY(0)';
-      obs.unobserve(entry.target);
+      if(entry.isIntersecting){
+        entry.target.classList.add('revealed');
+        entry.target.style.opacity = 1;
+        entry.target.style.transform = 'translateY(0)';
+        o.unobserve(entry.target);
+      }
     });
-  },appearOptions);
-  faders.forEach(fader=>appearOnScroll.observe(fader));
+  }, { threshold: 0.12, rootMargin:'0px 0px -40px 0px' });
+  sections.forEach(s => {
+    s.style.opacity = 0; s.style.transform = 'translateY(16px)';
+    obs.observe(s);
+  });
+})();
 
-  // Scroll-top mygtuko rodymas
-  const scrollBtn=document.querySelector('.scroll-top');
-  window.addEventListener('scroll',()=>{
-    if(window.scrollY>300) scrollBtn.style.display='block';
-    else scrollBtn.style.display='none';
+/* ----------------------------
+   MAP MARKERS: tooltip & animations
+   - markers positioned by percentage left/top attributes
+   - tooltip on hover/click, accessible
+   ---------------------------- */
+(function mapMarkers(){
+  const overlay = document.getElementById('mapOverlay');
+  if(!overlay) return;
+  const markers = overlay.querySelectorAll('.marker');
+
+  // ensure markers have inline left/top if not set
+  markers.forEach(m => {
+    const l = m.dataset.left || (Math.random()*80 + 8);
+    const t = m.dataset.top || (Math.random()*70 + 12);
+    m.style.left = (l+'%'); m.style.top = (t+'%');
+    // simple entrance bounce
+    m.style.transform = 'translate(-50%,-50%) scale(0.01)';
+    setTimeout(()=> m.style.transform = 'translate(-50%,-50%) scale(1)', 300 + Math.random()*600);
   });
 
-  // Scroll spy meniu aktyvumas
-  const sections = document.querySelectorAll('main section, main .section, #map, #secrets');
+  // create tooltip element and attach on hover/click
+  function makeTooltip(title, desc){
+    const tt = document.createElement('div');
+    tt.className = 'tooltip';
+    tt.innerHTML = '<h4>'+ title +'</h4><div>'+ (desc || '') +'</div><small>Informacija: neatskleisk tikslių koord.</small>';
+    document.body.appendChild(tt);
+    return tt;
+  }
+
+  let activeTooltip = null;
+
+  function showTooltip(marker){
+    if(activeTooltip) hideTooltip(activeTooltip.marker);
+    const title = marker.dataset.title || 'Vieta';
+    const desc = marker.dataset.desc || '';
+    const tt = makeTooltip(title, desc);
+    activeTooltip = { marker, tt };
+    // position relative to marker on screen
+    const rect = marker.getBoundingClientRect();
+    tt.style.left = (rect.left + rect.width/2) + 'px';
+    tt.style.top = (rect.top + window.scrollY) + 'px';
+    tt.style.opacity = 1; tt.style.visibility = 'visible';
+    // small reveal
+    setTimeout(()=> tt.classList.add('revealed'), 20);
+  }
+
+  function hideTooltip(marker){
+    if(!activeTooltip) return;
+    const tt = activeTooltip.tt;
+    tt.style.opacity = 0; tt.style.visibility = 'hidden';
+    setTimeout(()=> tt.remove(), 300);
+    activeTooltip = null;
+  }
+
+  markers.forEach(m => {
+    // hover handlers
+    m.addEventListener('mouseenter', (e)=>{
+      m.style.transform = 'translate(-50%,-50%) scale(1.12)';
+      showTooltip(m);
+    });
+    m.addEventListener('mouseleave', (e)=>{
+      m.style.transform = 'translate(-50%,-50%) scale(1)';
+      // hide tooltip after short delay if not clicked
+      setTimeout(()=> { if(activeTooltip && activeTooltip.marker === m) hideTooltip(m); }, 400);
+    });
+
+    // click to lock tooltip (for mobile)
+    m.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      if(activeTooltip && activeTooltip.marker === m){
+        hideTooltip(m);
+      } else {
+        showTooltip(m);
+      }
+    });
+  });
+
+  // click anywhere to hide active tooltip
+  document.addEventListener('click', (e)=>{
+    if(activeTooltip) hideTooltip(activeTooltip.marker);
+  });
+
+})();
+
+/* ----------------------------
+   SCROLL TOP button & scroll spy & hamburger for mobile
+   ---------------------------- */
+(function uiHelpers(){
+  const scrollBtn = document.getElementById('scrollTopBtn');
   const navLinks = document.querySelectorAll('header nav a');
-  window.addEventListener('scroll',()=>{
-    let current = '';
-    sections.forEach(sec=>{
-      const secTop = sec.offsetTop - 70;
-      if(scrollY >= secTop) current = sec.id;
+  const hamburger = document.getElementById('hamburgerBtn');
+
+  // show/hide scroll button
+  window.addEventListener('scroll', () => {
+    if(window.scrollY > 260) scrollBtn.classList.add('show');
+    else scrollBtn.classList.remove('show');
+
+    // scroll spy: find current section by offset
+    let cur = '';
+    document.querySelectorAll('main > .container, main .section, #map').forEach(sec => {
+      const id = sec.id || sec.querySelector('h2')?.textContent?.toLowerCase()?.replace(/\s+/g,'') || null;
+      if(!sec.id) return;
+      if(window.scrollY >= sec.offsetTop - 90) cur = sec.id;
     });
-    navLinks.forEach(link=>{
-      link.classList.remove('active');
-      if(link.getAttribute('href').includes(current)) link.classList.add('active');
+    navLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === ('#'+cur));
     });
   });
+
+  // hamburger mobile menu
+  hamburger.addEventListener('click', ()=>{
+    const nav = document.querySelector('header nav');
+    if(nav.style.display === 'flex'){ nav.style.display = 'none'; }
+    else { nav.style.display = 'flex'; nav.style.flexDirection = 'column'; nav.style.position = 'absolute'; nav.style.top = '66px'; nav.style.right = '14px'; nav.style.background = 'rgba(6,6,7,0.98)'; nav.style.padding = '12px'; nav.style.borderRadius = '10px'; nav.style.boxShadow = '0 12px 40px rgba(0,0,0,0.6)'; }
+  });
+
+  // improve anchor clicks (close mobile menu)
+  document.querySelectorAll('header nav a').forEach(a => {
+    a.addEventListener('click', ()=>{
+      const nav = document.querySelector('header nav');
+      if(window.innerWidth < 900) nav.style.display = 'none';
+    });
+  });
+
+})();
+
+/* ----------------------------
+   OPTIONAL: Make markers configurable (example API)
+   You can later replace this with fetching JSON from GitHub (e.g. markers.json)
+   ---------------------------- */
+
+/* Example how you'd update markers from external file:
+fetch('/markers.json').then(r=>r.json()).then(list=> { // create markers dynamically });
+*/
+
 </script>
 </body>
 </html>
