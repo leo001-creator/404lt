@@ -235,11 +235,11 @@ main{ position:relative; z-index:12; padding-bottom:140px; }
 .req-star{ color:#ffd45a; font-size:14px; }
 
 /* inputs */
-input[type="text"], input[type="email"], input[type="file"], textarea{
+input[type="text"], input[type="email"], textarea{
   padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.06); background: rgba(0,0,0,0.28); color:var(--text);
 }
 
-/* file preview */
+/* file preview removed (per request) */
 .file-preview{ font-size:13px; color:#d6d6d6; }
 
 /* submit area */
@@ -362,7 +362,6 @@ footer{ margin-top:60px; padding:36px 18px; text-align:center; font-size:14px; c
     <div id="gallery" class="container section card" role="region" aria-label="Galerija">
       <h3 class="animated">Galerija</h3>
       <div class="gallery" aria-live="polite" style="margin-top:12px;">
-        <!-- Each .item contains skeleton + real img (lazy) -->
         <div class="item" data-src="https://via.placeholder.com/1200x800.png?text=Vieta+1"><div class="skeleton"></div><img alt="Vieta 1" loading="lazy"></div>
         <div class="item" data-src="https://via.placeholder.com/1200x800.png?text=Vieta+2"><div class="skeleton"></div><img alt="Vieta 2" loading="lazy"></div>
         <div class="item" data-src="https://via.placeholder.com/1200x800.png?text=Vieta+3"><div class="skeleton"></div><img alt="Vieta 3" loading="lazy"></div>
@@ -370,13 +369,13 @@ footer{ margin-top:60px; padding:36px 18px; text-align:center; font-size:14px; c
       </div>
     </div>
 
-    <!-- CONTACTS (vertical, file attach, stars for required) -->
+    <!-- CONTACTS (REDESIGNED WITHOUT FILE INPUT) -->
     <div id="contact" class="container section card" role="region" aria-label="Kontaktai">
       <h3 class="animated">Kontaktai</h3>
       <p style="color:#d6d6d6; margin-top:8px;">Palik savo žinutę. Privalomi laukeliai pažymėti ★</p>
 
       <div class="contact-grid" style="margin-top:16px;">
-        <form id="contactForm" class="contact-form" action="#" method="POST" enctype="multipart/form-data" novalidate>
+        <form id="contactForm" class="contact-form" action="#" method="POST" novalidate>
           <label for="c-name">Vardas <span class="req-star" title="Privalomas">★</span></label>
           <input id="c-name" name="name" type="text" placeholder="Tavo vardas" required>
 
@@ -386,10 +385,6 @@ footer{ margin-top:60px; padding:36px 18px; text-align:center; font-size:14px; c
           <label for="c-social">Social (Discord / TikTok / Insta) <small style="font-weight:400;color:#bfbfbf;margin-left:6px;">(neprivalomas)</small></label>
           <input id="c-social" name="social" type="text" placeholder="pvz. discord: username#1234">
 
-          <label for="c-file">Prisegti failą <small style="font-weight:400;color:#bfbfbf;margin-left:6px;">(neprivaloma)</small></label>
-          <input id="c-file" name="attachment" type="file" accept="image/*,.pdf,.doc,.docx">
-          <div id="filePreview" class="file-preview" aria-live="polite"></div>
-
           <label for="c-message">Žinutė <span class="req-star" title="Privalomas">★</span></label>
           <textarea id="c-message" name="message" rows="6" placeholder="Žinutė..." required></textarea>
 
@@ -397,15 +392,30 @@ footer{ margin-top:60px; padding:36px 18px; text-align:center; font-size:14px; c
             <button id="formSubmit" type="submit" class="btn primary ripple">Siųsti</button>
             <div id="formStatus" aria-live="polite"></div>
           </div>
-          <div class="optional-note">Jeigu nori, gali prisegti nuotrauką arba dokumentą (Formspree apribojimai taikomi).</div>
+
+          <div class="optional-note">Social media laukas neprivalomas. Failų prisegimas pašalintas.</div>
         </form>
 
+        <!-- RIGHT COLUMN: CONTACT INFO + PROJECT MANAGER -->
         <div class="contact-info">
           <h4 style="color:#ffd7b5;margin-bottom:8px;">Greiti kontaktai</h4>
           <p style="color:#d6d6d6;">Discord: <span id="discordPlaceholder" style="color:#fff;">(pridėsi vėliau)</span></p>
           <p style="color:#d6d6d6;">TikTok: <span id="tiktokPlaceholder" style="color:#fff;">(pridėsi vėliau)</span></p>
           <p style="color:#d6d6d6;">El. paštas: <span id="emailPlaceholder" style="color:#fff;">(pridėsi vėliau)</span></p>
-          <div style="margin-top:16px;"><h5 style="color:#ffd7b5;margin-bottom:6px;">Dalijimasis</h5><p style="color:#d6d6d6;">Share: <a href="#" style="color:var(--accent2);">Facebook</a> · <a href="#" style="color:var(--accent2);">Twitter</a></p></div>
+
+          <hr style="border:none;border-top:1px solid rgba(255,255,255,0.03); margin:12px 0;">
+
+          <h4 style="color:#ffd7b5;margin-bottom:8px;">Projekto vadovo kontaktai</h4>
+          <p style="color:#d6d6d6; margin-bottom:6px;">
+            Vardas Pavardė<br>
+            el. paštas: <a href="mailto:vadovas@404.lt" style="color:#ff9f1c;">vadovas@404.lt</a><br>
+            tel.: <a href="tel:+37060000000" style="color:#ff9f1c;">+370 600 00000</a>
+          </p>
+
+          <div style="margin-top:16px;">
+            <h5 style="color:#ffd7b5;margin-bottom:6px;">Dalijimasis</h5>
+            <p style="color:#d6d6d6;">Share: <a href="#" style="color:var(--accent2);">Facebook</a> · <a href="#" style="color:var(--accent2);">Twitter</a></p>
+          </div>
         </div>
       </div>
     </div>
@@ -431,7 +441,7 @@ footer{ margin-top:60px; padding:36px 18px; text-align:center; font-size:14px; c
 
 <script>
 /* =========================
-   CONFIG: Formspree endpoint
+   CONFIG: Formspree endpoint (TAMO)
    ========================= */
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mreezwzg';
 
@@ -462,11 +472,12 @@ function initReveals(){
   addEventListener('resize', ()=>{ w = canvas.width = innerWidth; h = canvas.height = innerHeight; initParticles(); });
 
   const particles = [];
-  const COUNT = Math.round((w*h) / 70000) + 10;
+  let COUNT = Math.round((w*h) / 70000) + 10;
 
   function rand(min,max){ return Math.random()*(max-min)+min; }
   function initParticles(){
     particles.length = 0;
+    COUNT = Math.round((w*h) / 70000) + 10;
     for(let i=0;i<COUNT;i++){
       particles.push({
         x: Math.random()*w,
@@ -613,22 +624,7 @@ function initReveals(){
 })();
 
 /* =========================
-   File preview helper
-   ========================= */
-(function filePreview(){
-  const fileInput = document.getElementById('c-file');
-  const preview = document.getElementById('filePreview');
-  if(!fileInput || !preview) return;
-  fileInput.addEventListener('change', ()=> {
-    const f = fileInput.files[0];
-    if(!f){ preview.textContent=''; return; }
-    const kb = Math.round(f.size/1024);
-    preview.textContent = `Pridėtas: ${f.name} — ${kb} KB`;
-  });
-})();
-
-/* =========================
-   Formspree AJAX submit (supports file via FormData)
+   Formspree AJAX submit (text-only, no file)
    ========================= */
 (function formspree(){
   const form = document.getElementById('contactForm');
@@ -643,26 +639,30 @@ function initReveals(){
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
+
     const name = form.elements['name'].value.trim();
     const email = form.elements['email'].value.trim();
     const message = form.elements['message'].value.trim();
-    if(!name || !email || !message){ showStatus('Užpildyk privalomus laukus (★).', false); return; }
+    const social = form.elements['social'].value.trim();
+
+    if(!name || !email || !message){
+      showStatus('Užpildyk privalomus laukus (★).', false);
+      return;
+    }
 
     submitBtn.disabled = true;
     const orig = submitBtn.innerHTML;
     submitBtn.innerHTML = 'Siunčiama…';
     showStatus('Siunčiama…');
 
+    // FormData (text only)
     const fd = new FormData();
     fd.append('name', name);
     fd.append('email', email);
-    fd.append('social', form.elements['social'].value || '');
+    fd.append('social', social);
     fd.append('message', message);
     fd.append('page', window.location.href);
     fd.append('timestamp', new Date().toISOString());
-
-    const fileInput = form.elements['attachment'];
-    if(fileInput && fileInput.files && fileInput.files[0]) fd.append('attachment', fileInput.files[0], fileInput.files[0].name);
 
     try{
       const resp = await fetch(FORMSPREE_ENDPOINT, { method:'POST', headers:{ 'Accept':'application/json' }, body: fd });
@@ -671,7 +671,6 @@ function initReveals(){
         showStatus('Žinutė išsiųsta — ačiū!', true);
         submitBtn.innerHTML = 'Išsiųsta';
         form.reset();
-        document.getElementById('filePreview').textContent = '';
         setTimeout(()=> { submitBtn.disabled=false; submitBtn.innerHTML=orig; showStatus(''); }, 2500);
       } else {
         let msg='Klaida siunčiant. Pabandyk vėliau.';
