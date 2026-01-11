@@ -7,188 +7,188 @@
 <meta name="description" content="404.lt – pamirštos ir slaptos vietos Lietuvoje. Interaktyvus žemėlapis, galerija ir istorijos." />
 <link rel="icon" href="https://via.placeholder.com/32x32.png?text=404" />
 <style>
-/* =========================
-   RESET & GLOBALS
-   ========================= */
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-body {
+/* ========= RESET & GLOBALS ========= */
+* { box-sizing: border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+body{
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  background: #050507;
-  color: #e9eef1;
-  min-height: 100vh;
-  position: relative;
-  overflow-x: hidden;
+  background: #051018; color:#e9eef1; min-height:100vh; overflow-x:hidden; position:relative;
 }
 
-/* =========================
-   SIMPLE LOADER (LOGO + DOTS)
-   ========================= */
+/* ========= SIMPLE LOADER ========= */
 #preloader {
-  position: fixed; inset: 0; display:flex; align-items:center; justify-content:center;
-  background: linear-gradient(180deg,#050507 0%, #040405 100%); z-index: 99999;
+  position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+  background: linear-gradient(180deg,#040506 0%, #05060b 100%); z-index:99999;
   transition: opacity .45s ease, visibility .45s ease;
-  visibility: visible; opacity: 1;
 }
-.loader {
-  display:flex; flex-direction:column; align-items:center; gap:10px;
-  padding: 20px 26px; border-radius: 14px;
+.loader { display:flex; flex-direction:column; align-items:center; gap:10px; padding:18px 22px; border-radius:12px;
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 8px 40px rgba(255,76,76,0.06);
-  border: 1px solid rgba(255,255,255,0.03);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.03);
 }
-.logo-box {
-  width:96px; height:96px; border-radius:16px;
-  background: linear-gradient(135deg,#ff4c4c,#ff9f1c);
-  display:flex; align-items:center; justify-content:center; font-weight:900; color:#120707;
-  box-shadow: 0 18px 50px rgba(255,76,76,0.18), inset 0 -8px 18px rgba(0,0,0,0.15);
-  animation: logoPulse 1.2s ease-in-out infinite;
+.logo-box { width:88px;height:88px;border-radius:14px; display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#ff4c4c,#ff9f1c); font-weight:900; color:#120707; font-size:28px; animation:logoPulse 1.2s ease-in-out infinite;
 }
-@keyframes logoPulse {
-  from { transform: translateY(0) scale(1); box-shadow: 0 18px 50px rgba(255,76,76,0.18); }
-  to { transform: translateY(-6px) scale(1.04); box-shadow: 0 30px 80px rgba(255,76,76,0.22); }
-}
-.loader-text { font-weight:800; color:#fff; letter-spacing:1px; font-size:18px; }
-.load-dots { display:flex; gap:8px; margin-top:6px; }
-.load-dots span {
-  width:10px; height:10px; border-radius:50%; background: rgba(255,255,255,0.08);
-  transform: scale(.85);
-  animation: dotBounce 1.1s infinite ease-in-out;
-}
-.load-dots span:nth-child(2){ animation-delay: .12s; }
-.load-dots span:nth-child(3){ animation-delay: .24s; }
-@keyframes dotBounce {
-  0% { transform: translateY(0) scale(.85); opacity:.6; }
-  50% { transform: translateY(-8px) scale(1.08); opacity:1; }
-  100% { transform: translateY(0) scale(.85); opacity:.6; }
-}
-#preloader.hidden { opacity:0; visibility:hidden; pointer-events:none; }
+@keyframes logoPulse { from{transform:translateY(0)} to{transform:translateY(-6px)} }
+.loader-text{ font-weight:800; color:#fff; letter-spacing:0.6px; }
+.load-dots{ display:flex; gap:8px; margin-top:6px; }
+.load-dots span{ width:10px;height:10px;border-radius:50%; background:rgba(255,255,255,0.08); transform:scale(.9); animation:dotBounce 1.1s infinite ease-in-out;}
+.load-dots span:nth-child(2){ animation-delay:.12s } .load-dots span:nth-child(3){ animation-delay:.24s }
+@keyframes dotBounce { 0%{transform:translateY(0)} 50%{transform:translateY(-8px)} 100%{transform:translateY(0)} }
+#preloader.hidden{ opacity:0; visibility:hidden; pointer-events:none }
 
-/* =========================
-   BACKGROUND EFFECTS (aurora, grid, starfield, clouds, rain, leaves)
-   ========================= */
-.aurora {
-  position: fixed; inset: -10% -10% -10% -10%; z-index: 0; pointer-events: none; opacity: 0.16;
+/* ========= BACKGROUND: aurora, grid, starfield, clouds, rain, birds, trees, leaves ========= */
+/* aurora */
+.aurora { position:fixed; inset:-15% -10% -10% -10%; z-index:0; pointer-events:none; opacity:0.16;
   background: linear-gradient(120deg, rgba(255,76,76,0.12), rgba(255,159,28,0.06), rgba(40,120,255,0.02));
-  background-size: 400% 400%;
-  animation: auroraShift 18s ease-in-out infinite;
-  filter: blur(30px) saturate(1.1);
+  background-size:400% 400%; animation:auroraShift 18s ease-in-out infinite; filter:blur(28px) saturate(1.05);
 }
-@keyframes auroraShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+@keyframes auroraShift{ 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
 
-.bg-lines {
-  position: fixed; inset:0; z-index: 1; pointer-events:none; opacity:0.09;
-  background-image:
-    linear-gradient(90deg, rgba(255,76,76,0.05) 0.5px, transparent 0.5px),
-    linear-gradient(180deg, rgba(255,159,28,0.02) 0.5px, transparent 0.5px);
-  background-size: 420px 420px, 320px 320px;
-  animation: moveGrid 36s linear infinite;
-  mix-blend-mode: screen;
+/* grid lines */
+.bg-lines{ position:fixed; inset:0; z-index:1; pointer-events:none; opacity:0.09;
+  background-image: linear-gradient(90deg, rgba(255,76,76,0.05) 0.5px, transparent 0.5px), linear-gradient(180deg, rgba(255,159,28,0.02) 0.5px, transparent 0.5px);
+  background-size:420px 420px, 320px 320px; animation:moveGrid 36s linear infinite; mix-blend-mode:screen;
 }
-@keyframes moveGrid { from{background-position:0 0,0 0} to{background-position:420px 420px,-320px -320px} }
+@keyframes moveGrid{ from{background-position:0 0,0 0} to{background-position:420px 420px,-320px -320px} }
 
-.bg-streaks { position: fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden; opacity:0.06; }
-.bg-streaks .streak { position:absolute; width:200%; height:1px; background: linear-gradient(90deg, transparent, rgba(255,76,76,0.9), transparent); top:20%; left:-40%; transform:rotate(-4deg); filter: blur(7px); animation: streakMove 12s linear infinite; }
-.bg-streaks .streak.two { top:60%; animation-duration:18s; transform:rotate(-2deg); opacity:0.45; }
-@keyframes streakMove { from{left:-100%} to{left:100%} }
+/* streaks */
+.bg-streaks{ position:fixed; inset:0; z-index:1; opacity:0.06; pointer-events:none; overflow:hidden; }
+.bg-streaks .streak{ position:absolute; width:200%; height:1px; background:linear-gradient(90deg, transparent, rgba(255,76,76,0.85), transparent); top:18%; left:-40%; transform:rotate(-4deg); filter:blur(7px); animation:streakMove 12s linear infinite; }
+.bg-streaks .streak.two{ top:62%; animation-duration:18s; transform:rotate(-2deg); opacity:0.45; }
+@keyframes streakMove{ from{left:-100%} to{left:100%} }
 
-.clouds { position: fixed; inset: 6% 0 70% 0; z-index: 2; pointer-events: none; opacity:0.07; filter: blur(8px); }
-.rain { pointer-events:none; position: fixed; inset:0; z-index:1; opacity:0.02; }
-.rain::before { content:""; position:absolute; inset:0; background-image: repeating-linear-gradient(120deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 2px, transparent 8px); transform: translateY(-20vh); animation: rainFall 6s linear infinite; filter: blur(0.5px) brightness(0.98); }
-@keyframes rainFall { to { transform: translateY(20vh); } }
+/* starfield */
+#starfield{ position:fixed; inset:0; z-index:1; pointer-events:none; opacity:0.13; }
 
-.floating { position: fixed; inset: 20% 0 10% 0; z-index:2; pointer-events:none; overflow:visible; opacity:0.06; }
-.leaf { position:absolute; width:24px; height:12px; background: linear-gradient(90deg, rgba(255,120,80,0.9), rgba(255,200,140,0.6)); border-radius:6px; transform-origin:center; filter: blur(0.6px); animation: leafFloat linear infinite; }
-.leaf.one { left:8%; top:20%; animation-duration: 12s; } .leaf.two { left:55%; top:35%; animation-duration: 18s; } .leaf.three { left:78%; top:60%; animation-duration: 22s; }
-@keyframes leafFloat { 0%{transform:translateY(0) rotate(0deg) scale(.9); opacity:.9} 50%{transform:translateY(24vh) rotate(40deg) scale(1.05); opacity:.6} 100%{transform:translateY(0) rotate(0deg) scale(.9); opacity:.9} }
+/* clouds (subtle svg) */
+.clouds{ position:fixed; inset:6% 0 70% 0; z-index:2; pointer-events:none; opacity:0.08; filter:blur(8px); transform-origin:center; }
 
-.bg-noise { position: fixed; inset:0; z-index: 4; pointer-events:none; mix-blend-mode: overlay; opacity:0.03;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="n"><feTurbulence baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(%23n)" /></svg>');
+/* rain */
+.rain{ pointer-events:none; position:fixed; inset:0; z-index:1; opacity:0.02; }
+.rain::before{ content:""; position:absolute; inset:0; background-image:repeating-linear-gradient(120deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 2px, transparent 8px); transform:translateY(-20vh); animation:rainFall 6s linear infinite; filter:blur(.4px) }
+@keyframes rainFall{ to{ transform:translateY(20vh); } }
+
+/* birds - flying across */
+.birds { position:fixed; inset:10% 0 70% 0; z-index:3; pointer-events:none; opacity:0.85; }
+.bird { position:absolute; width:40px; height:20px; opacity:0.95; transform:translateX(-10%); animation:fly linear infinite; }
+.bird.one { top:12%; left:-10%; animation-duration:14s; animation-delay:0.6s; }
+.bird.two { top:22%; left:-15%; animation-duration:18s; animation-delay:2s; transform:scale(0.9); }
+.bird.three { top:30%; left:-20%; animation-duration:22s; animation-delay:4s; transform:scale(0.8); }
+@keyframes fly{ from{ transform:translateX(-10%) translateY(0) } 50%{ transform:translateX(110%) translateY(-6px) } to{ transform:translateX(210%) translateY(0) } }
+
+/* trees silhouettes at bottom with sway */
+.trees { position:fixed; left:0; right:0; bottom:0; height:28vh; z-index:2; pointer-events:none; opacity:0.22; }
+.tree { position:absolute; bottom:0; width:12%; height:100%; background: linear-gradient(180deg, rgba(6,6,8,0.95), rgba(12,12,16,0.95)); border-radius:8px 8px 0 0; transform-origin: bottom center; animation:sway 6s ease-in-out infinite; }
+.tree.one{ left:4%; transform:scaleX(0.9); animation-delay:0s; }
+.tree.two{ left:18%; height:90%; animation-delay:0.8s; transform:scaleX(1); }
+.tree.three{ left:34%; height:110%; animation-delay:1.6s; transform:scaleX(0.95); }
+.tree.four{ left:58%; height:92%; animation-delay:0.4s; }
+.tree.five{ left:76%; height:100%; animation-delay:1.0s; transform:scaleX(0.92); }
+@keyframes sway{ 0%{ transform: rotate(-1.2deg) } 50%{ transform: rotate(1.2deg) } 100%{ transform: rotate(-1.2deg) } }
+
+/* floating leaves */
+.floating { position:fixed; inset:20% 0 10% 0; z-index:3; pointer-events:none; opacity:0.06; }
+.leaf { position:absolute; width:22px; height:10px; border-radius:6px; background:linear-gradient(90deg, rgba(255,140,80,0.95), rgba(255,210,140,0.6)); filter:blur(.6px); animation:leafFloat linear infinite; }
+.leaf.one{ left:7%; top:18%; animation-duration:12s; } .leaf.two{ left:52%; top:36%; animation-duration:18s; } .leaf.three{ left:80%; top:62%; animation-duration:22s; }
+@keyframes leafFloat{ 0%{ transform:translateY(0) rotate(0deg) } 50%{ transform:translateY(26vh) rotate(38deg) } 100%{ transform:translateY(0) rotate(0deg) } }
+
+/* subtle grain */
+.bg-noise{ position:fixed; inset:0; z-index:4; pointer-events:none; mix-blend-mode:overlay; opacity:0.03;
+  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="n"><feTurbulence baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(%23n)" /></svg>');
 }
 
-#starfield { position: fixed; inset:0; z-index:1; pointer-events:none; opacity:0.14; }
+/* ========= HEADER & NAV ========= */
+header{ position:fixed; top:0; left:0; right:0; height:66px; z-index:10000; display:flex; align-items:center; justify-content:space-between; padding:0 28px; background: linear-gradient(180deg, rgba(5,5,6,0.86), rgba(5,5,6,0.35)); border-bottom:1px solid rgba(255,255,255,0.03); backdrop-filter: blur(6px); }
+.brand{ display:flex; gap:12px; align-items:center; }
+.logo{ width:44px; height:44px; border-radius:8px; background: linear-gradient(135deg,#ff4c4c,#ff9f1c); display:flex; align-items:center; justify-content:center; font-weight:900; color:#120707; }
+.brand h1{ color:#fff; letter-spacing:2px; font-size:18px; }
+nav{ display:flex; gap:18px; align-items:center; }
+nav a{ color:#e9eef1; font-weight:600; padding:8px 10px; border-radius:8px; transition: all .18s ease; }
+nav a:hover, nav a.active{ color:#060607; background: linear-gradient(90deg,#ff4c4c,#ff9f1c); transform:translateY(-3px); box-shadow:0 8px 30px rgba(255,76,76,0.12); }
 
-/* =========================
-   HEADER & NAV
-   ========================= */
-header {
-  position: fixed; top:0; left:0; right:0; height:66px; z-index: 9999;
-  display:flex; align-items:center; justify-content:space-between; padding:0 28px;
-  background: linear-gradient(180deg, rgba(5,5,6,0.86), rgba(5,5,6,0.35));
-  border-bottom: 1px solid rgba(255,255,255,0.03);
-  backdrop-filter: blur(6px);
+/* ========= HERO ========= */
+.hero{ position:relative; height:78vh; min-height:520px; display:flex; align-items:center; justify-content:center; text-align:center; padding:0 20px; z-index:6; overflow:visible; }
+.hero .content{ max-width:960px; z-index:7; }
+.hero h2{ color:#fff; font-size:clamp(28px,4vw,56px); transform:translateY(10px); opacity:0; }
+.hero p{ color:#d6d6d6; margin-top:12px; transform:translateY(10px); opacity:0; }
+.cta{ margin-top:18px; opacity:0; transform:translateY(10px); }
+
+/* buttons */
+.btn{ padding:10px 16px; border-radius:10px; font-weight:700; cursor:pointer; border:none; transition: all .22s ease; display:inline-flex; gap:10px; align-items:center; }
+.btn.primary{ background: linear-gradient(90deg,#ff4c4c,#ff9f1c); color:#060607; box-shadow:0 12px 40px rgba(255,76,76,0.12); }
+.btn.ghost{ background: rgba(255,255,255,0.02); color:#e9eef1; border:1px solid rgba(255,255,255,0.04); }
+
+/* ========= MAIN / MAP / SECTIONS ========= */
+main{ position:relative; z-index:7; padding-bottom:160px; }
+.container{ width:92%; max-width:1100px; margin:28px auto; }
+.map-wrap{ border-radius:14px; overflow:hidden; padding:12px; background: linear-gradient(180deg, rgba(255,76,76,0.03), rgba(255,159,28,0.02)); box-shadow:0 28px 90px rgba(0,0,0,0.6); border:2px solid rgba(255,76,76,0.08); transition:transform .28s ease; }
+.map-iframe{ width:100%; height:68vh; min-height:380px; border:0; }
+
+/* sections */
+.section{ background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:12px; padding:22px; margin:30px auto; box-shadow:0 12px 40px rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.02); }
+
+/* secret list */
+.secret-list li{ margin:8px 0; color:#ffd5a8; font-style:italic; }
+
+/* gallery */
+.gallery{ display:grid; gap:12px; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); }
+.gallery img{ width:100%; height:150px; object-fit:cover; border-radius:10px; border:1px solid rgba(255,255,255,0.03); cursor:pointer; }
+
+/* ========= CONTACTS (REDESIGNED) ========= */
+/* Contact area: vertical form layout, clear labels, required stars */
+.contact-grid{ display:grid; grid-template-columns: 1fr 360px; gap:20px; align-items:start; }
+@media (max-width:940px){ .contact-grid{ grid-template-columns: 1fr; } }
+
+.contact-info{ padding:16px; border-radius:10px; background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); border:1px solid rgba(255,255,255,0.02); }
+
+.contact-form{ display:flex; flex-direction:column; gap:12px; }
+.contact-form label{ display:flex; align-items:center; gap:8px; font-weight:700; color:#ffd7b5; font-size:13px; }
+.req-star{ color:#ffd45a; font-size:14px; margin-left:6px; }
+.optional-note{ font-size:12px; color:#bfbfbf; margin-top:6px; }
+
+/* inputs */
+.contact-form input[type="text"],
+.contact-form input[type="email"],
+.contact-form input[type="file"],
+.contact-form textarea{
+  width:100%; padding:10px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.06);
+  background: rgba(0,0,0,0.28); color:#e9eef1;
 }
-.brand { display:flex; align-items:center; gap:12px; z-index:10000; }
-.logo { width:44px; height:44px; border-radius:8px; background: linear-gradient(135deg,#ff4c4c,#ff9f1c); display:flex; align-items:center; justify-content:center; font-weight:900; color:#120707; box-shadow: 0 8px 26px rgba(255,76,76,0.12); }
-.brand h1 { font-size:18px; letter-spacing:2px; color:#fff; margin-left:4px; }
-nav { display:flex; gap:18px; align-items:center; z-index:10000; }
-nav a { color:#e9eef1; font-weight:600; padding:8px 10px; border-radius:8px; transition: all .18s ease; font-size:14px; }
-nav a:hover, nav a.active { color:#060607; background: linear-gradient(90deg,#ff4c4c,#ff9f1c); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(255,76,76,0.12); }
+.contact-form textarea{ min-height:140px; resize:vertical; }
 
-/* =========================
-   HERO
-   ========================= */
-.hero { position: relative; height:78vh; min-height:520px; display:flex; align-items:center; justify-content:center; text-align:center; padding:0 20px; z-index: 6; overflow:visible; }
-.hero .content { max-width:960px; z-index: 7; }
-.hero h2 { font-size: clamp(28px, 4vw, 56px); color: #fff; line-height:1.02; letter-spacing:1px; text-shadow: 0 6px 30px rgba(0,0,0,0.8), 0 0 36px rgba(255,76,76,0.06); transform: translateY(10px); opacity: 0; }
-.hero p { margin-top:14px; color:#d6d6d6; font-size:18px; transform: translateY(10px); opacity: 0;}
-.cta { margin-top:22px; display:flex; gap:12px; justify-content:center; transform: translateY(10px); opacity: 0; }
-.btn { padding:10px 18px; border-radius:10px; font-weight:700; cursor:pointer; border:none; transition:all .22s ease; display:inline-flex; align-items:center; gap:10px; }
-.btn.primary { background: linear-gradient(90deg,#ff4c4c,#ff9f1c); color:#060607; box-shadow: 0 12px 40px rgba(255,76,76,0.12); }
-.btn.ghost { background: rgba(255,255,255,0.02); color:#e9eef1; border: 1px solid rgba(255,255,255,0.04); }
+/* file preview (optional) */
+.file-preview{ font-size:13px; color:#d6d6d6; margin-top:6px; }
 
-/* =========================
-   MAIN / MAP / SECTIONS
-   ========================= */
-main { position: relative; z-index: 7; padding-bottom: 160px; }
-.container { width:92%; max-width:1200px; margin: 30px auto; }
-.map-wrap { position: relative; border-radius:16px; overflow:hidden; padding:12px; margin-top:12px; background: linear-gradient(180deg, rgba(255,76,76,0.03), rgba(255,159,28,0.02)); box-shadow: 0 28px 90px rgba(0,0,0,0.6), 0 0 80px rgba(255,76,76,0.06); border: 2px solid rgba(255,76,76,0.08); transition: transform .28s ease, box-shadow .28s ease; }
-.map-wrap:hover { transform: translateY(-6px); box-shadow: 0 40px 120px rgba(0,0,0,0.7), 0 0 160px rgba(255,76,76,0.12); }
-.map-wrap::before { content:''; position:absolute; inset:-8px; z-index:1; border-radius:20px; background: radial-gradient(closest-side, rgba(255,76,76,0.12), transparent 40%); filter: blur(16px); pointer-events:none; }
-.map-iframe { width:100%; height:72vh; min-height:420px; border:0; display:block; position:relative; z-index:3; }
-.section { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:12px; padding:22px; margin: 34px auto; box-shadow: 0 12px 40px rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.02); }
-.secret-list li { margin: 10px 0; font-style: italic; color:#ffd5a8; transition: transform .18s ease, color .18s ease; cursor: default; }
-.secret-list li:hover { transform: translateX(6px); color:#ffdfc9; }
-.gallery { display:grid; gap:12px; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); }
-.gallery img { width:100%; height:150px; object-fit:cover; border-radius:10px; border:1px solid rgba(255,255,255,0.03); transition: transform .24s ease, box-shadow .24s ease; cursor:pointer; }
-.gallery img:hover { transform: scale(1.03); box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
-
-/* contact */
-.contact-grid { display:grid; grid-template-columns: 1fr 380px; gap:20px; align-items:start; }
-@media (max-width: 940px) { .contact-grid { grid-template-columns: 1fr; } }
-.contact-info { padding:18px; border-radius:10px; background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); border:1px solid rgba(255,255,255,0.02); }
-.contact-form input, .contact-form textarea { padding:10px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background: rgba(0,0,0,0.3); color:#e9eef1; resize:vertical; }
-.contact-form label { font-weight:700; color:#ffd7b5; font-size:13px; }
-.contact-form button { margin-top:8px; padding:10px 16px; border-radius:8px; border:none; background: linear-gradient(90deg,#ff4c4c,#ff9f1c); color:#060607; font-weight:800; cursor:pointer; }
+/* submit row */
+.submit-row{ display:flex; gap:12px; align-items:center; }
+#formStatus{ font-size:14px; color:#d6d6d6; }
 
 /* footer */
-footer { margin-top:60px; padding:32px 18px; text-align:center; color:#9aa3ad; font-size:14px; border-top:1px solid rgba(255,255,255,0.02); background: linear-gradient(180deg, rgba(0,0,0,0.03), transparent); position: sticky; bottom:0; }
+footer{ margin-top:60px; padding:32px 18px; text-align:center; color:#9aa3ad; font-size:14px; border-top:1px solid rgba(255,255,255,0.02); }
 
 /* scroll top */
-.scroll-top { position: fixed; right:20px; bottom:24px; width:52px; height:52px; border-radius:50%; background: linear-gradient(90deg,#ff4c4c,#ff9f1c); color:#060607; font-weight:800; font-size:20px; display:flex; align-items:center; justify-content:center; z-index: 9999; cursor:pointer; box-shadow: 0 12px 40px rgba(255,76,76,0.12); transition: transform .18s ease, opacity .18s ease; opacity:0; pointer-events:none; }
-.scroll-top.show { opacity: 1; pointer-events:auto; transform: translateY(-6px); }
+.scroll-top{ position:fixed; right:20px; bottom:24px; width:52px; height:52px; border-radius:50%; background:linear-gradient(90deg,#ff4c4c,#ff9f1c); color:#060607; display:flex; align-items:center; justify-content:center; z-index:9999; opacity:0; pointer-events:none; transition:all .18s ease; }
+.scroll-top.show{ opacity:1; pointer-events:auto; transform:translateY(-6px); }
 
-/* reveal util */
-.revealed { opacity:1 !important; transform: none !important; transition: all .6s cubic-bezier(.2,.9,.3,1); }
-.fade-delay-1 { transition-delay: .15s; }
-.fade-delay-2 { transition-delay: .35s; }
-.fade-delay-3 { transition-delay: .65s; }
+/* utility reveal */
+.revealed{ opacity:1 !important; transform:none !important; transition: all .6s cubic-bezier(.2,.9,.3,1); }
+.animated{ opacity:0; transform:translateY(12px); }
 
-/* responsive */
-@media (max-width: 900px) {
-  nav { display:none; }
-  .hamburger { display:flex; }
-  .hero { height:60vh; min-height:420px; }
-  .map-iframe { height:62vh; }
+/* accessibility focus */
+button:focus, input:focus, textarea:focus, a:focus { outline:none; box-shadow: 0 0 0 4px rgba(255,76,76,0.12); border-radius:8px; }
+
+/* responsive tweaks */
+@media (max-width:700px){
+  .logo-box{ width:72px;height:72px; }
 }
 </style>
 </head>
 <body>
 
-  <!-- PRELOADER (SIMPLE) -->
+  <!-- PRELOADER -->
   <div id="preloader" aria-hidden="false">
     <div class="loader" role="status" aria-live="polite">
-      <div class="logo-box" aria-hidden="true"><div style="font-weight:900; font-size:28px; color:#120707;">404</div></div>
+      <div class="logo-box" aria-hidden="true">404</div>
       <div class="loader-text">404.lt</div>
       <div class="load-dots" aria-hidden="true"><span></span><span></span><span></span></div>
     </div>
@@ -199,22 +199,29 @@ footer { margin-top:60px; padding:32px 18px; text-align:center; color:#9aa3ad; f
   <div class="bg-lines" aria-hidden="true"></div>
   <div class="bg-streaks" aria-hidden="true"><div class="streak"></div><div class="streak two"></div></div>
   <div class="clouds" aria-hidden="true">
-    <svg width="100%" height="120" viewBox="0 0 1200 120" preserveAspectRatio="none" style="transform:translateY(0);">
-      <path d="M0 60 C 100 20, 200 20, 300 60 C 400 100, 500 100, 600 60 C 700 20, 800 20, 900 60 C 1000 100, 1100 100, 1200 60 L1200 120 L0 120 Z" fill="rgba(255,255,255,0.06)"></path>
-    </svg>
+    <svg width="100%" height="120" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0 60 C 100 20, 200 20, 300 60 C 400 100, 500 100, 600 60 C 700 20, 800 20, 900 60 C 1000 100, 1100 100, 1200 60 L1200 120 L0 120 Z" fill="rgba(255,255,255,0.06)"></path></svg>
   </div>
   <div class="rain" aria-hidden="true"></div>
+
+  <!-- birds -->
+  <div class="birds" aria-hidden="true">
+    <svg class="bird one" viewBox="0 0 24 12" xmlns="http://www.w3.org/2000/svg"><path d="M1 8 C5 2, 11 2, 15 8 C17 10, 22 10, 24 8" stroke="rgba(255,255,255,0.9)" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <svg class="bird two" viewBox="0 0 24 12" xmlns="http://www.w3.org/2000/svg"><path d="M1 8 C5 2, 11 2, 15 8 C17 10, 22 10, 24 8" stroke="rgba(255,255,255,0.9)" stroke-width="1.0" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <svg class="bird three" viewBox="0 0 24 12" xmlns="http://www.w3.org/2000/svg"><path d="M1 8 C5 2, 11 2, 15 8 C17 10, 22 10, 24 8" stroke="rgba(255,255,255,0.9)" stroke-width="0.9" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+
+  <!-- trees -->
+  <div class="trees" aria-hidden="true">
+    <div class="tree one"></div><div class="tree two"></div><div class="tree three"></div><div class="tree four"></div><div class="tree five"></div>
+  </div>
+
   <div class="floating" aria-hidden="true"><div class="leaf one"></div><div class="leaf two"></div><div class="leaf three"></div></div>
   <div class="bg-noise" aria-hidden="true"></div>
   <canvas id="starfield" aria-hidden="true"></canvas>
 
   <!-- HEADER -->
   <header role="banner">
-    <div class="brand" aria-hidden="true">
-      <div class="logo">404</div>
-      <h1>404.lt</h1>
-    </div>
-
+    <div class="brand" aria-hidden="true"><div class="logo">404</div><h1>404.lt</h1></div>
     <nav role="navigation" aria-label="Pagrindinis meniu">
       <a href="#hero">Pradžia</a>
       <a href="#map">Žemėlapis</a>
@@ -224,32 +231,22 @@ footer { margin-top:60px; padding:32px 18px; text-align:center; color:#9aa3ad; f
       <a href="#gallery">Galerija</a>
       <a href="#contact">Kontaktai</a>
     </nav>
-
-    <button class="hamburger" id="hamburgerBtn" aria-label="Atidaryti meniu" title="Meniu" style="display:none;">
-      <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="18" height="2" rx="1" fill="#e9eef1"/><rect y="6" width="18" height="2" rx="1" fill="#e9eef1"/><rect y="12" width="18" height="2" rx="1" fill="#e9eef1"/></svg>
-    </button>
   </header>
 
   <!-- HERO -->
   <section id="hero" class="hero" role="region" aria-label="Pagrindinė">
     <div class="content">
-      <h2 id="heroTitle" class="animated">Pamirštos vietos Lietuvoje</h2>
-      <p id="heroSub" class="animated fade-delay-1">Atrask slaptas vietas, istorijas ir nuotraukas. Žemėlapis nuolat atnaujinamas.</p>
-      <div class="cta animated fade-delay-2">
-        <button class="btn primary" onclick="document.getElementById('map').scrollIntoView({behavior:'smooth'})">Žiūrėti žemėlapį</button>
-        <a class="btn ghost" href="#secrets">Slaptos vietos</a>
-      </div>
+      <h2 class="animated">Pamirštos vietos Lietuvoje</h2>
+      <p class="animated fade-delay-1">Atrask slaptas vietas, istorijas ir nuotraukas. Žemėlapis nuolat atnaujinamas.</p>
+      <div class="cta animated fade-delay-2"><button class="btn primary" onclick="document.getElementById('map').scrollIntoView({behavior:'smooth'})">Žiūrėti žemėlapį</button><a class="btn ghost" href="#secrets">Slaptos vietos</a></div>
     </div>
   </section>
 
   <!-- MAIN -->
   <main>
-    <!-- MAP (no markers) -->
+    <!-- MAP -->
     <div id="map" class="container map-wrap section" role="region" aria-label="Žemėlapis">
-      <iframe class="map-iframe"
-        src="https://www.google.com/maps/d/u/0/embed?mid=19QHh2E1I7QKqMvTN9FCtXeXCQyja2yU&ehbc=2E312F&noprof=1"
-        loading="lazy"
-        title="404.lt žemėlapis"></iframe>
+      <iframe class="map-iframe" src="https://www.google.com/maps/d/u/0/embed?mid=19QHh2E1I7QKqMvTN9FCtXeXCQyja2yU&ehbc=2E312F&noprof=1" loading="lazy" title="404.lt žemėlapis"></iframe>
     </div>
 
     <!-- SLAPTOS VIETOS -->
@@ -295,42 +292,47 @@ footer { margin-top:60px; padding:32px 18px; text-align:center; color:#9aa3ad; f
       </div>
     </div>
 
-    <!-- CONTACTS with Formspree integration -->
+    <!-- CONTACTS (REDESIGNED) -->
     <div id="contact" class="container section" role="region" aria-label="Kontaktai">
       <h2 class="animated">Kontaktai</h2>
-      <p style="color:#d6d6d6; margin-top:8px;">Įrašyk savo Discord / TikTok / el. paštą čia arba siųsk žinutę per formą — gausime ją tiesiai į Formspree.</p>
+      <p style="color:#d6d6d6; margin-top:8px;">Palik savo žinutę čia. Privalomi laukeliai pažymėti žvaigždute ★</p>
 
       <div class="contact-grid" style="margin-top:16px;">
-        <!-- FORM (AJAX via fetch -> Formspree) -->
-        <form id="contactForm" class="contact-form" action="#" method="POST" novalidate>
-          <label for="c-name">Vardas</label>
+        <!-- FORM -->
+        <form id="contactForm" class="contact-form" action="#" method="POST" enctype="multipart/form-data" novalidate>
+          <label for="c-name">Vardas <span class="req-star" title="Privalomas">★</span></label>
           <input id="c-name" name="name" type="text" placeholder="Tavo vardas" required>
 
-          <label for="c-email">El. paštas</label>
+          <label for="c-email">El. paštas <span class="req-star" title="Privalomas">★</span></label>
           <input id="c-email" name="email" type="email" placeholder="tavo@pastas.lt" required>
 
-          <label for="c-social">Social (Discord / TikTok / Insta)</label>
+          <label for="c-social">Social (Discord / TikTok / Insta) <small style="font-weight:400;color:#bfbfbf;margin-left:6px;">(neprivalomas)</small></label>
           <input id="c-social" name="social" type="text" placeholder="pvz. discord: username#1234">
 
-          <label for="c-message">Žinutė</label>
+          <label for="c-file">Prisegti failą <small style="font-weight:400;color:#bfbfbf;margin-left:6px;">(neprivaloma)</small></label>
+          <input id="c-file" name="attachment" type="file" accept="image/*,.pdf,.doc,.docx">
+          <div id="filePreview" class="file-preview" aria-live="polite"></div>
+
+          <label for="c-message">Žinutė <span class="req-star" title="Privalomas">★</span></label>
           <textarea id="c-message" name="message" rows="6" placeholder="Žinutė..." required></textarea>
 
-          <div style="display:flex; gap:10px; align-items:center;">
+          <div class="submit-row">
             <button id="formSubmit" type="submit" class="btn primary">Siųsti</button>
-            <div id="formStatus" style="color:#d6d6d6; font-size:14px;"></div>
+            <div id="formStatus" aria-live="polite" style="color:#d6d6d6;"></div>
           </div>
-          <div style="font-size:12px;color:#bfbfbf;margin-top:8px;">Formspree integracija (AJAX). Jeigu nori fallback be JS, pakeisk form `action` į Formspree URL.</div>
+          <div class="optional-note">Jeigu nori, gali prisegti nuotrauką arba dokumentą (failo dydis pagal Formspree apribojimus).</div>
         </form>
 
+        <!-- RIGHT COLUMN: CONTACT INFO -->
         <div class="contact-info">
-          <h4 style="color:#ffd7b5;margin-bottom:10px;">Greiti kontaktai</h4>
+          <h4 style="color:#ffd7b5;margin-bottom:8px;">Greiti kontaktai</h4>
           <p style="color:#d6d6d6;">Discord: <span id="discordPlaceholder" style="color:#fff;">(pridėsi vėliau)</span></p>
           <p style="color:#d6d6d6;">TikTok: <span id="tiktokPlaceholder" style="color:#fff;">(pridėsi vėliau)</span></p>
           <p style="color:#d6d6d6;">El. paštas: <span id="emailPlaceholder" style="color:#fff;">(pridėsi vėliau)</span></p>
 
-          <div style="margin-top:18px;">
-            <h5 style="color:#ffd7b5;margin-bottom:8px;">Dalijimasis</h5>
-            <p style="color:#d6d6d6;font-size:14px;">Share: <a href="#" style="color:#ff9f1c;">Facebook</a> · <a href="#" style="color:#ff9f1c;">Twitter</a> · <a href="#" style="color:#ff9f1c;">Reddit</a></p>
+          <div style="margin-top:16px;">
+            <h5 style="color:#ffd7b5;margin-bottom:6px;">Dalijimasis</h5>
+            <p style="color:#d6d6d6;">Share: <a href="#" style="color:#ff9f1c;">Facebook</a> · <a href="#" style="color:#ff9f1c;">Twitter</a> · <a href="#" style="color:#ff9f1c;">Reddit</a></p>
           </div>
         </div>
       </div>
@@ -338,21 +340,18 @@ footer { margin-top:60px; padding:32px 18px; text-align:center; color:#9aa3ad; f
 
   </main>
 
-  <!-- SCROLL TOP -->
+  <!-- scroll top -->
   <button class="scroll-top" id="scrollTopBtn" aria-label="Grįžti į viršų">↑</button>
 
-  <!-- FOOTER -->
+  <!-- footer -->
   <footer role="contentinfo">
     <div style="max-width:1100px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:8px;">
-      <div style="display:flex;gap:12px;align-items:center;">
-        <div style="width:8px;height:8px;border-radius:50%;background:linear-gradient(90deg,#ff4c4c,#ff9f1c);"></div>
-        <div style="font-weight:800;color:#e7eef0;">404.lt</div>
-      </div>
+      <div style="display:flex;gap:12px;align-items:center;"><div style="width:8px;height:8px;border-radius:50%;background:linear-gradient(90deg,#ff4c4c,#ff9f1c);"></div><div style="font-weight:800;color:#e7eef0;">404.lt</div></div>
       <div style="color:#9aa3ad;font-size:13px;">© 2026 404.lt — Pamirštos vietos. Projektas bendruomeninis. Visi teisės saugomos.</div>
     </div>
   </footer>
 
-  <!-- LIGHTBOX -->
+  <!-- lightbox (gallery) -->
   <div id="lightbox" aria-hidden="true" style="position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(0,0,0,0.85); z-index:99999;">
     <button id="lbClose" aria-label="Uždaryti" style="position:absolute; top:24px; right:24px; background:transparent; border:none; color:#fff; font-size:28px; cursor:pointer;">✕</button>
     <img id="lbImg" src="" alt="" style="max-width:92%; max-height:86%; border-radius:10px; box-shadow: 0 20px 80px rgba(0,0,0,0.8);">
@@ -360,58 +359,44 @@ footer { margin-top:60px; padding:32px 18px; text-align:center; color:#9aa3ad; f
 
 <script>
 /* =========================
-   FORMSPREE ENDPOINT
+   CONFIG: Formspree endpoint (TAVO)
    ========================= */
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mreezwzg';
 
 /* =========================
-   PRELOADER: simple hide on load
+   PRELOADER: hide on load
    ========================= */
 window.addEventListener('load', () => {
   const pre = document.getElementById('preloader');
-  if(pre){
-    pre.classList.add('hidden');
-    setTimeout(()=> { if(pre.parentNode) pre.parentNode.removeChild(pre); }, 700);
-  }
-  // start initial reveals after load
+  if(pre){ pre.classList.add('hidden'); setTimeout(()=> pre.remove(), 700); }
   setTimeout(initReveals, 120);
 });
 
 /* small reveal for hero */
 function initReveals(){
   document.querySelectorAll('.hero .animated, .animated').forEach((el, i) => {
-    setTimeout(()=> { el.style.opacity = 1; el.style.transform = 'translateY(0)'; el.classList.add('revealed'); }, 140 + i*120);
+    setTimeout(()=> { el.style.opacity=1; el.style.transform='translateY(0)'; el.classList.add('revealed'); }, 120 + i*100);
   });
 }
 
 /* =========================
-   STARFIELD (canvas)
+   STARFIELD canvas
    ========================= */
 (function starfield(){
   const canvas = document.getElementById('starfield');
   if(!canvas) return;
   const ctx = canvas.getContext('2d');
-  let w = canvas.width = innerWidth;
-  let h = canvas.height = innerHeight;
-  const stars = [];
-  const STAR_COUNT = Math.floor((w*h) / 9000);
-  for(let i=0;i<STAR_COUNT;i++){
-    stars.push({ x: Math.random()*w, y: Math.random()*h, r: Math.random()*1.6 + 0.2, a: Math.random()*0.9 + 0.1, vx: (Math.random()-0.5)*0.03, vy: (Math.random()-0.2)*0.03 });
-  }
-  function resize(){ w = canvas.width = innerWidth; h = canvas.height = innerHeight; }
+  let w = canvas.width = innerWidth, h = canvas.height = innerHeight;
+  const stars = [], COUNT = Math.floor((w*h)/9000);
+  for(let i=0;i<COUNT;i++) stars.push({ x:Math.random()*w, y:Math.random()*h, r:Math.random()*1.6+0.2, a:Math.random()*0.9+0.1, vx:(Math.random()-0.5)*0.03, vy:(Math.random()-0.2)*0.03 });
+  function resize(){ w=canvas.width=innerWidth; h=canvas.height=innerHeight; }
   addEventListener('resize', resize);
   function draw(){
     ctx.clearRect(0,0,w,h);
     for(const s of stars){
-      ctx.beginPath();
-      ctx.fillStyle = `rgba(255,255,255,${s.a})`;
-      ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-      ctx.fill();
-      s.a += (Math.random()-0.5)*0.02;
-      if(s.a < 0.05) s.a = 0.05;
-      if(s.a > 1) s.a = 1;
-      s.x += s.vx; s.y += s.vy;
-      if(s.x < 0) s.x = w; if(s.x > w) s.x = 0; if(s.y < 0) s.y = h; if(s.y > h) s.y = 0;
+      ctx.beginPath(); ctx.fillStyle=`rgba(255,255,255,${s.a})`; ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fill();
+      s.a += (Math.random()-0.5)*0.02; if(s.a<0.05) s.a=0.05; if(s.a>1) s.a=1;
+      s.x+=s.vx; s.y+=s.vy; if(s.x<0) s.x=w; if(s.x>w) s.x=0; if(s.y<0) s.y=h; if(s.y>h) s.y=0;
     }
     requestAnimationFrame(draw);
   }
@@ -419,37 +404,18 @@ function initReveals(){
 })();
 
 /* =========================
-   CLOUDS motion
+   Clouds subtle motion
    ========================= */
-(function clouds(){
+(function cloudsMotion(){
   const clouds = document.querySelector('.clouds svg');
   if(!clouds) return;
-  let t = 0;
-  function loop(){
-    t += 0.002;
-    const x = Math.sin(t) * 8;
-    clouds.style.transform = `translateX(${x}px)`;
-    requestAnimationFrame(loop);
-  }
+  let t=0;
+  function loop(){ t+=0.002; clouds.style.transform = `translateX(${Math.sin(t)*8}px)`; requestAnimationFrame(loop); }
   loop();
 })();
 
 /* =========================
-   PARALLAX for flares on scroll
-   ========================= */
-(function parallax(){
-  const flares = document.querySelectorAll('.aurora, .bg-flares .flare');
-  window.addEventListener('scroll', () => {
-    const y = window.scrollY;
-    flares.forEach((f, i) => {
-      const speed = 0.02 + (i * 0.01);
-      f.style.transform = `translateY(${y * speed}px) scale(${1 - i*0.04})`;
-    });
-  }, { passive: true });
-})();
-
-/* =========================
-   Fade-in sections
+   Fade-in sections via IntersectionObserver
    ========================= */
 (function fadeInSections(){
   const targets = document.querySelectorAll('.section, .gallery img, .secret-list li, .hero .animated, h2.animated');
@@ -457,76 +423,62 @@ function initReveals(){
     entries.forEach(entry => {
       if(entry.isIntersecting){
         entry.target.classList.add('revealed');
-        entry.target.style.opacity = 1;
-        entry.target.style.transform = 'translateY(0)';
+        entry.target.style.opacity=1;
+        entry.target.style.transform='translateY(0)';
         obs.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-  targets.forEach(t => { t.style.opacity = 0; t.style.transform = 'translateY(14px)'; io.observe(t); });
+  }, { threshold:0.12, rootMargin:'0px 0px -40px 0px' });
+  targets.forEach(t => { t.style.opacity=0; t.style.transform='translateY(14px)'; io.observe(t); });
 })();
 
 /* =========================
-   GALLERY LIGHTBOX
+   Gallery lightbox
    ========================= */
 (function lightbox(){
   const images = document.querySelectorAll('.gallery img');
-  const lightbox = document.getElementById('lightbox');
-  const lbImg = document.getElementById('lbImg');
-  const lbClose = document.getElementById('lbClose');
+  const lightbox = document.getElementById('lightbox'), lbImg = document.getElementById('lbImg'), lbClose = document.getElementById('lbClose');
   if(!images.length) return;
-  images.forEach(img => {
-    img.addEventListener('click', () => {
-      const src = img.dataset.large || img.src;
-      lbImg.src = src;
-      lightbox.style.display = 'flex'; lightbox.setAttribute('aria-hidden','false');
-      setTimeout(()=> lightbox.style.opacity = '1', 20);
-      document.body.style.overflow = 'hidden';
-    });
-  });
-  function closeLB(){ lightbox.style.opacity='0'; lightbox.setAttribute('aria-hidden','true'); setTimeout(()=> { lightbox.style.display='none'; lbImg.src=''; document.body.style.overflow=''; }, 260); }
+  images.forEach(img => { img.addEventListener('click', () => { lbImg.src = img.dataset.large||img.src; lightbox.style.display='flex'; lightbox.setAttribute('aria-hidden','false'); setTimeout(()=> lightbox.style.opacity='1',20); document.body.style.overflow='hidden'; }); });
+  function closeLB(){ lightbox.style.opacity='0'; lightbox.setAttribute('aria-hidden','true'); setTimeout(()=>{ lightbox.style.display='none'; lbImg.src=''; document.body.style.overflow=''; },260); }
   lbClose.addEventListener('click', closeLB);
   lightbox.addEventListener('click', (e)=> { if(e.target===lightbox) closeLB(); });
-  document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeLB(); });
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeLB(); });
 })();
 
 /* =========================
-   UI: scroll top, nav
+   UI: scroll-top, nav scrollspy
    ========================= */
 (function ui(){
   const scrollBtn = document.getElementById('scrollTopBtn');
   const navLinks = document.querySelectorAll('header nav a');
-  const hamburger = document.getElementById('hamburgerBtn');
-  const nav = document.querySelector('header nav');
-
-  window.addEventListener('scroll', () => {
-    if(window.scrollY > 260) scrollBtn.classList.add('show'); else scrollBtn.classList.remove('show');
-    let current = '';
-    document.querySelectorAll('main > .container, main .section').forEach(sec => {
-      const id = sec.id;
-      if(!id) return;
-      if(window.scrollY >= sec.offsetTop - 90) current = id;
-    });
-    navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === ('#' + current)));
+  window.addEventListener('scroll', ()=> {
+    if(window.scrollY>260) scrollBtn.classList.add('show'); else scrollBtn.classList.remove('show');
+    let cur=''; document.querySelectorAll('main > .container, main .section').forEach(sec=>{ const id=sec.id; if(!id) return; if(window.scrollY >= sec.offsetTop - 90) cur=id; });
+    navLinks.forEach(a=> a.classList.toggle('active', a.getAttribute('href') === ('#'+cur)));
   });
-
-  scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-
-  hamburger.addEventListener('click', () => {
-    if(nav.style.display === 'flex'){ nav.style.display = ''; } else {
-      nav.style.display = 'flex'; nav.style.flexDirection = 'column'; nav.style.position = 'absolute';
-      nav.style.top = '66px'; nav.style.right = '14px'; nav.style.background = 'rgba(6,6,7,0.98)';
-      nav.style.padding = '12px'; nav.style.borderRadius = '10px'; nav.style.boxShadow = '0 12px 40px rgba(0,0,0,0.6)'; nav.style.zIndex = 99999;
-    }
-  });
-
-  navLinks.forEach(a => a.addEventListener('click', () => { if(window.innerWidth < 900) nav.style.display = 'none'; }));
+  scrollBtn.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
 })();
 
 /* =========================
-   FORM: Formspree AJAX submit
+   FILE PREVIEW helper
    ========================= */
-(function formspreeSetup(){
+(function filePreview(){
+  const fileInput = document.getElementById('c-file');
+  const preview = document.getElementById('filePreview');
+  if(!fileInput || !preview) return;
+  fileInput.addEventListener('change', ()=> {
+    const f = fileInput.files[0];
+    if(!f){ preview.textContent=''; return; }
+    const maxKB = Math.round(f.size/1024);
+    preview.textContent = `Pridėtas: ${f.name} — ${maxKB} KB`;
+  });
+})();
+
+/* =========================
+   FORM: send via Formspree using FormData (supports file attachments)
+   ========================= */
+(function formspree(){
   const form = document.getElementById('contactForm');
   const statusEl = document.getElementById('formStatus');
   const submitBtn = document.getElementById('formSubmit');
@@ -539,65 +491,66 @@ function initReveals(){
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const data = {
-      name: form.elements['name'].value,
-      email: form.elements['email'].value,
-      social: form.elements['social'].value,
-      message: form.elements['message'].value,
-      page: window.location.href,
-      timestamp: new Date().toISOString()
-    };
 
-    if(!data.name || !data.email || !data.message){
-      showStatus('Užpildyk visus privalomus laukus.', false);
+    // basic client-side required check
+    const name = form.elements['name'].value.trim();
+    const email = form.elements['email'].value.trim();
+    const message = form.elements['message'].value.trim();
+    if(!name || !email || !message){
+      showStatus('Užpildyk privalomus laukus (★).', false);
       return;
     }
 
     submitBtn.disabled = true;
-    const origText = submitBtn.innerHTML;
+    const orig = submitBtn.innerHTML;
     submitBtn.innerHTML = 'Siunčiama…';
     showStatus('Siunčiama…');
+
+    // build FormData (works with attachments)
+    const fd = new FormData();
+    fd.append('name', name);
+    fd.append('email', email);
+    fd.append('social', form.elements['social'].value || '');
+    fd.append('message', message);
+    fd.append('page', window.location.href);
+    fd.append('timestamp', new Date().toISOString());
+
+    // file (optional)
+    const fileInput = form.elements['attachment'];
+    if(fileInput && fileInput.files && fileInput.files[0]){
+      fd.append('attachment', fileInput.files[0], fileInput.files[0].name);
+    }
 
     try{
       const resp = await fetch(FORMSPREE_ENDPOINT, {
         method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
+        headers: { 'Accept': 'application/json' },
+        body: fd
       });
-      const json = await resp.json();
+      const json = await resp.json().catch(()=>({}));
       if(resp.ok || json.ok || json.success){
         showStatus('Žinutė išsiųsta — ačiū!', true);
         submitBtn.innerHTML = 'Išsiųsta';
         form.reset();
-        setTimeout(()=> { submitBtn.disabled = false; submitBtn.innerHTML = origText; showStatus(''); }, 2500);
+        document.getElementById('filePreview').textContent = '';
+        setTimeout(()=> { submitBtn.disabled = false; submitBtn.innerHTML = orig; showStatus(''); }, 2500);
       } else {
-        showStatus('Klaida siunčiant. Patikrink duomenis arba pabandyk vėliau.', false);
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = origText;
+        // handle errors
+        let msg = 'Klaida siunčiant. Pabandyk vėliau.';
+        if(json && json.errors && json.errors.length) msg = json.errors.map(x=>x.message).join('; ');
+        showStatus(msg, false);
+        submitBtn.disabled = false; submitBtn.innerHTML = orig;
       }
     } catch(err){
       console.error('Formspree error', err);
       showStatus('Tinklapių klaida. Pabandyk vėliau.', false);
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = origText;
+      submitBtn.disabled = false; submitBtn.innerHTML = orig;
     }
   });
 })();
 
-/* =========================
-   placeholders helper
-   ========================= */
-(function fillPlaceholders(){
-  // document.getElementById('discordPlaceholder').textContent = 'YourName#1234';
-  // document.getElementById('tiktokPlaceholder').textContent = '@yourtik';
-  // document.getElementById('emailPlaceholder').textContent = 'you@domain.lt';
-})();
-
 /* accessibility: show focus when tabbing */
-document.addEventListener('keydown', (e) => { if(e.key === 'Tab') document.body.classList.add('user-is-tabbing'); });
+document.addEventListener('keydown', (e)=> { if(e.key === 'Tab') document.body.classList.add('user-is-tabbing'); });
 </script>
 </body>
 </html>
