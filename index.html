@@ -1,244 +1,199 @@
 <!DOCTYPE html>
 <html lang="lt">
 <head>
-  <meta charset="UTF-8">
-  <title>404.lt – Pamirštos vietos</title>
-  <style>
-    /* --- Reset ir bendra --- */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<meta charset="UTF-8">
+<title>404.lt – Pamirštos vietos</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Pamirštos vietos Lietuvoje – atrask slaptas ir pamirštas vietas su mūsų interaktyviu žemėlapiu.">
+<link rel="icon" href="https://via.placeholder.com/32x32.png?text=404">
+<style>
+  /* RESET */
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Arial', sans-serif; background:#0a0a0a; color:#e5e5e5; overflow-x:hidden; }
 
-    body {
-      font-family: 'Arial', sans-serif;
-      background: #0a0a0a;
-      color: #e5e5e5;
-      overflow-x: hidden;
-    }
+  /* PRELOADER */
+  #preloader {position:fixed;top:0;left:0;width:100%;height:100%;background:#0a0a0a;display:flex;align-items:center;justify-content:center;z-index:9999;}
+  #preloader div {width:50px;height:50px;border:5px solid #333;border-top:5px solid #ff4c4c;border-radius:50%;animation:spin 1s linear infinite;}
+  @keyframes spin { 100%{ transform:rotate(360deg); } }
 
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
+  /* HEADER / NAV */
+  header {position:fixed;top:0;left:0;width:100%;height:60px;background:rgba(20,20,20,0.95);display:flex;justify-content:space-between;align-items:center;padding:0 40px;z-index:1000;box-shadow:0 2px 10px rgba(0,0,0,0.5);}
+  header h1 {font-size:24px;color:#ff4c4c;letter-spacing:2px;}
+  nav a {margin-left:25px;font-weight:bold;color:#e5e5e5;transition:0.3s;}
+  nav a:hover, nav a.active {color:#ff4c4c; transform:scale(1.1); }
 
-    /* --- Viršutinė meniu juosta --- */
-    header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 60px;
-      background: rgba(20,20,20,0.95);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 40px;
-      z-index: 1000;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-    }
+  /* HERO SECTION */
+  .hero {height:100vh;background:url('https://via.placeholder.com/1920x1080.png?text=Pamirštos+vietos') center/cover no-repeat;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;}
+  .hero h2 {font-size:48px;color:#ff9f1c;text-shadow:0 0 10px #000;opacity:0;animation:fadeInUp 1s forwards;}
+  .hero p {color:#ccc;font-size:20px;margin-top:15px;opacity:0;animation:fadeInUp 1s forwards;animation-delay:0.5s;}
+  @keyframes fadeInUp {to{opacity:1;transform:translateY(0);} from{opacity:0;transform:translateY(20px);}}
 
-    header h1 {
-      font-size: 24px;
-      color: #ff4c4c;
-      letter-spacing: 2px;
-    }
+  /* DARK MODE TOGGLE */
+  .dark-toggle {position:fixed;top:70px;right:20px;background:#ff4c4c;color:#fff;padding:8px 12px;border:none;border-radius:5px;cursor:pointer;z-index:1001;transition:0.3s;}
+  .dark-toggle:hover {background:#ff0000;}
 
-    nav a {
-      margin-left: 25px;
-      font-weight: bold;
-      color: #e5e5e5;
-      transition: 0.3s;
-    }
+  /* MAIN */
+  main {margin-top:60px;}
+  h3 {font-size:36px;margin:30px 0;color:#ff9f1c;opacity:0;animation:fadeInUp 1s forwards;}
+  
+  /* MAP */
+  .map-container {width:90%;max-width:1200px;margin:50px auto;border-radius:10px;overflow:hidden;box-shadow:0 0 30px #222;transition:transform 0.3s ease,box-shadow 0.3s ease;opacity:0;animation:fadeInUp 1s forwards;}
+  .map-container iframe {width:100%;height:75vh;border:none;transition:none;}
 
-    nav a:hover {
-      color: #ff4c4c;
-      transform: scale(1.1);
-    }
+  /* SECRET PLACES */
+  .secret-places {background:#111;color:#ff9f1c;width:90%;max-width:1000px;margin:50px auto;padding:20px;border-radius:10px;border:1px solid #333;box-shadow:0 0 20px #222;opacity:0;animation:fadeInUp 1s forwards;}
+  .secret-places li {margin-bottom:10px;font-style:italic;transition:0.3s;}
+  .secret-places li:hover {color:#ff4c4c;transform:scale(1.05);}
 
-    /* --- Pagrindinis turinys --- */
-    main {
-      margin-top: 80px;
-      text-align: center;
-    }
+  /* ABOUT / NEWS / GALLERY */
+  .section {width:90%;max-width:1000px;margin:50px auto;padding:20px;border-radius:10px;background:#111;box-shadow:0 0 20px #222;opacity:0;animation:fadeInUp 1s forwards;}
+  .gallery {display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;}
+  .gallery img {width:100%;border-radius:10px;transition:0.3s;}
+  .gallery img:hover {transform:scale(1.05);box-shadow:0 0 20px #ff4c4c;}
 
-    h2 {
-      font-size: 36px;
-      margin: 20px 0;
-      color: #ff9f1c;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp 1s forwards;
-      animation-delay: 0.5s;
-    }
+  /* SCROLL TOP */
+  .scroll-top {position:fixed;bottom:30px;right:30px;background:#ff4c4c;color:#fff;border:none;border-radius:50%;width:50px;height:50px;font-size:24px;cursor:pointer;box-shadow:0 0 15px #ff4c4c;transition:0.3s;opacity:0.7;z-index:100;}
+  .scroll-top:hover {transform:scale(1.2);opacity:1;}
 
-    /* --- Žemėlapis --- */
-    .map-container {
-      width: 90%;
-      max-width: 1200px;
-      margin: 0 auto 50px auto;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 0 30px #222;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      opacity: 0;
-      animation: fadeInUp 1s forwards;
-      animation-delay: 1s;
-    }
+  /* FOOTER */
+  footer {position:sticky;bottom:0;width:100%;background:#111;padding:15px;text-align:center;color:#666;font-size:13px;box-shadow:0 -2px 10px rgba(0,0,0,0.5);}
 
-    .map-container iframe {
-      width: 100%;
-      height: 75vh;
-      border: none;
-      transition: none; /* pašalintas hover blur efektas */
-    }
-
-    /* --- Slaptos vietos --- */
-    .secret-places {
-      background: #111;
-      color: #ff9f1c;
-      width: 90%;
-      max-width: 1000px;
-      margin: 0 auto 50px auto;
-      padding: 20px;
-      border-radius: 10px;
-      border: 1px solid #333;
-      box-shadow: 0 0 20px #222;
-      opacity: 0;
-      animation: fadeInUp 1s forwards;
-      animation-delay: 1.5s;
-    }
-
-    .secret-places li {
-      margin-bottom: 10px;
-      font-style: italic;
-      transition: 0.3s;
-    }
-
-    .secret-places li:hover {
-      color: #ff4c4c;
-      transform: scale(1.05);
-    }
-
-    /* --- Mygtukas atgal į viršų --- */
-    .scroll-top {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      background: #ff4c4c;
-      color: #fff;
-      border: none;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      font-size: 24px;
-      cursor: pointer;
-      box-shadow: 0 0 15px #ff4c4c;
-      transition: 0.3s;
-      opacity: 0.7;
-      z-index: 100;
-    }
-
-    .scroll-top:hover {
-      transform: scale(1.2);
-      opacity: 1;
-    }
-
-    /* --- Footeris --- */
-    footer {
-      position: sticky;
-      bottom: 0;
-      width: 100%;
-      background: #111;
-      padding: 15px;
-      text-align: center;
-      color: #666;
-      font-size: 13px;
-      box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
-    }
-
-    /* --- Animacijos --- */
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* --- Smooth scroll --- */
-    html {
-      scroll-behavior: smooth;
-    }
-  </style>
+</style>
 </head>
 <body>
 
-  <!-- Meniu juosta -->
-  <header>
-    <h1>404.lt</h1>
-    <nav>
-      <a href="#map">Žemėlapis</a>
-      <a href="#secrets">Slaptos vietos</a>
-    </nav>
-  </header>
+<!-- PRELOADER -->
+<div id="preloader"><div></div></div>
 
-  <main>
-    <h2>Pamirštos vietos Lietuvoje</h2>
+<!-- HEADER -->
+<header>
+  <h1>404.lt</h1>
+  <nav>
+    <a href="#hero">Pradžia</a>
+    <a href="#map">Žemėlapis</a>
+    <a href="#secrets">Slaptos vietos</a>
+    <a href="#about">Apie projektą</a>
+    <a href="#news">Naujienos</a>
+    <a href="#gallery">Galerija</a>
+  </nav>
+</header>
 
-    <!-- Žemėlapis -->
-    <div class="map-container" id="map">
-      <iframe src="https://www.google.com/maps/d/u/0/embed?mid=19QHh2E1I7QKqMvTN9FCtXeXCQyja2yU&ehbc=2E312F&noprof=1"></iframe>
+<!-- DARK MODE TOGGLE -->
+<button class="dark-toggle" onclick="toggleDarkMode()">Tamsus / Šviesus</button>
+
+<!-- HERO SECTION -->
+<section class="hero" id="hero">
+  <h2>Pamirštos vietos Lietuvoje</h2>
+  <p>Atrask slaptas ir pamirštas vietas su mūsų interaktyviu žemėlapiu</p>
+</section>
+
+<main>
+  <!-- MAP -->
+  <div class="map-container" id="map">
+    <iframe src="https://www.google.com/maps/d/u/0/embed?mid=19QHh2E1I7QKqMvTN9FCtXeXCQyja2yU&ehbc=2E312F&noprof=1"></iframe>
+  </div>
+
+  <!-- SECRET PLACES -->
+  <div class="secret-places" id="secrets">
+    <h3>Slaptos vietos</h3>
+    <ul>
+      <li>Miško paslaptis #1 🌲</li>
+      <li>Pamirštas tiltas #2 🌉</li>
+      <li>Senovinis bunkeris #3 🕳️</li>
+      <li>Paslaptinga pilis #4 🏰</li>
+      <li>Senų laikų kelias #5 🛤️</li>
+    </ul>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="section" id="about">
+    <h3>Apie projektą</h3>
+    <p>404.lt – projektas, skirtas atrasti pamirštas ir slaptas vietas Lietuvoje. Čia rasi žemėlapius, nuotraukas ir paslėptus taškus, kurių dažniausiai nerasi įprastuose žemėlapiuose.</p>
+  </div>
+
+  <!-- NEWS -->
+  <div class="section" id="news">
+    <h3>Naujienos</h3>
+    <ul>
+      <li>2026-01-11 – Pridėtos naujos slaptos vietos.</li>
+      <li>2026-01-10 – Patobulintas žemėlapio dizainas.</li>
+      <li>2026-01-09 – Svetainė pasiekiama mobiliesiems.</li>
+    </ul>
+  </div>
+
+  <!-- GALLERY -->
+  <div class="section" id="gallery">
+    <h3>Galerija</h3>
+    <div class="gallery">
+      <img src="https://via.placeholder.com/400x250.png?text=Vieta+1" alt="Vieta 1">
+      <img src="https://via.placeholder.com/400x250.png?text=Vieta+2" alt="Vieta 2">
+      <img src="https://via.placeholder.com/400x250.png?text=Vieta+3" alt="Vieta 3">
+      <img src="https://via.placeholder.com/400x250.png?text=Vieta+4" alt="Vieta 4">
     </div>
+  </div>
 
-    <!-- Slaptos vietos -->
-    <div class="secret-places" id="secrets">
-      <h2>Slaptos vietos</h2>
-      <ul>
-        <li>Miško paslaptis #1 🌲</li>
-        <li>Pamirštas tiltas #2 🌉</li>
-        <li>Senovinis bunkeris #3 🕳️</li>
-        <li>Paslaptinga pilis #4 🏰</li>
-        <li>Senų laikų kelias #5 🛤️</li>
-      </ul>
-    </div>
-  </main>
+</main>
 
-  <!-- Mygtukas grįžti į viršų -->
-  <button class="scroll-top" onclick="window.scrollTo({top:0, behavior:'smooth'});">↑</button>
+<!-- SCROLL TOP -->
+<button class="scroll-top" onclick="window.scrollTo({top:0, behavior:'smooth'});">↑</button>
 
-  <!-- Footeris -->
-  <footer>
-    &copy; 2026 404.lt – Pamirštos vietos Lietuvoje
-  </footer>
+<!-- FOOTER -->
+<footer>
+  &copy; 2026 404.lt – Pamirštos vietos Lietuvoje
+</footer>
 
-  <!-- Papildomas JS animacijoms (fade-in ir scroll-top) -->
-  <script>
-    // Scroll-top mygtuko rodymas tik kai scroll >= 300px
-    const scrollBtn = document.querySelector('.scroll-top');
-    window.addEventListener('scroll', () => {
-      if(window.scrollY > 300) {
-        scrollBtn.style.display = 'block';
-      } else {
-        scrollBtn.style.display = 'none';
-      }
+<script>
+  // PRELOADER
+  window.addEventListener('load',()=>{document.getElementById('preloader').style.display='none';});
+
+  // FADE-IN scroll animacija
+  const faders = document.querySelectorAll('.map-container, .secret-places, .section');
+  const appearOptions = {threshold:0.1, rootMargin:"0px 0px -50px 0px"};
+  const appearOnScroll = new IntersectionObserver((entries, obs)=>{
+    entries.forEach(entry=>{
+      if(!entry.isIntersecting) return;
+      entry.target.style.opacity = 1;
+      entry.target.style.transform = 'translateY(0)';
+      obs.unobserve(entry.target);
     });
+  },appearOptions);
+  faders.forEach(fader=>appearOnScroll.observe(fader));
 
-    // Papildoma fade-in animacija elementams scroll metu
-    const faders = document.querySelectorAll('.map-container, .secret-places');
-    const appearOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
-    const appearOnScroll = new IntersectionObserver((entries, appearOnScroll) => {
-      entries.forEach(entry => {
-        if(!entry.isIntersecting) return;
-        entry.target.style.opacity = 1;
-        entry.target.style.transform = 'translateY(0)';
-        appearOnScroll.unobserve(entry.target);
-      });
-    }, appearOptions);
+  // Scroll-top mygtuko rodymas
+  const scrollBtn=document.querySelector('.scroll-top');
+  window.addEventListener('scroll',()=>{
+    if(window.scrollY>300) scrollBtn.style.display='block';
+    else scrollBtn.style.display='none';
+  });
 
-    faders.forEach(fader => {
-      appearOnScroll.observe(fader);
+  // DARK MODE TOGGLE
+  function toggleDarkMode(){
+    document.body.classList.toggle('light-mode');
+    if(document.body.classList.contains('light-mode')){
+      document.body.style.background='#f5f5f5';
+      document.body.style.color='#111';
+    } else {
+      document.body.style.background='#0a0a0a';
+      document.body.style.color='#e5e5e5';
+    }
+  }
+
+  // Scroll spy meniu aktyvumas
+  const sections = document.querySelectorAll('main section, main .section, #map, #secrets');
+  const navLinks = document.querySelectorAll('header nav a');
+  window.addEventListener('scroll',()=>{
+    let current = '';
+    sections.forEach(sec=>{
+      const secTop = sec.offsetTop - 70;
+      if(scrollY >= secTop) current = sec.id;
     });
-  </script>
+    navLinks.forEach(link=>{
+      link.classList.remove('active');
+      if(link.getAttribute('href').includes(current)) link.classList.add('active');
+    });
+  });
+</script>
+
 </body>
 </html>
