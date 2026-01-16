@@ -327,7 +327,7 @@ footer{ margin-top:60px; padding:36px 18px; text-align:center; font-size:14px; c
   <main>
     <!-- MAP -->
     <div id="map" class="container map-wrap section card" role="region" aria-label="Žemėlapis">
-      <iframe class="map-iframe" loading="lazy" src="https://www.google.com/maps/d/u/0/embed?mid=1g6gbNC7axAg9FBvBZgmwat0VT0WlPUs&ehbc=2E312F" title="404.lt žemėlapis"></iframe>
+      <iframe class="map-iframe" loading="lazy" src="https://www.google.com/maps/d/u/0/embed?mid=1g6gbNC7axAg9FBvBZgmwat0VT0WlPUs&ehbc=2E312F&noprof=1" title="404.lt žemėlapis"></iframe>
     </div>
 
     <!-- SLAPTOS VIETOS -->
@@ -786,5 +786,6 @@ function initReveals(){
 /* accessibility: focus on tabbing */
 document.addEventListener('keydown', (e)=> { if(e.key === 'Tab') document.body.classList.add('user-is-tabbing'); });
 </script>
+<script>document.body.style.userSelect='none';document.addEventListener('copy',e=>e.preventDefault());</script>
 </body>
 </html>
